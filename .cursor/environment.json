@@ -1,0 +1,11 @@
+{
+  "name": "Balsons Jupiter Suite",
+  "install": "./scripts/cloud-agent-install.sh",
+  "start": "python3 -m http.server 8080 --bind 0.0.0.0",
+  "ports": [
+    {
+      "name": "web",
+      "port": 8080
+    }
+  ]
+}
