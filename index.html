@@ -1,1636 +1,244 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Balsons Jupiter Suite</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <style>
-    /* ============================================================
-       BALSONS BRAND – TEAL (#0097B2) & RED (#E64646)
-       ============================================================ */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --teal: #0097B2;
-      --teal-dark: #007A8F;
-      --red: #E64646;
-      --red-dark: #C93A3A;
-      --white: #F9F7F4;
-      --gray: #E5E2DC;
-      --shadow: 0 6px 24px rgba(0,0,0,0.12);
-      --radius: 12px;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #F0EDE8;
-      color: #1A1A1A;
-      height: 100vh;
-      overflow: hidden;
-    }
-    /* ----- LOGIN SCREEN ----- */
-    #loginScreen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #0B1A33;
-    }
-    .login-box {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 16px;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-    }
-    .login-box .brand {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .login-box .brand i {
-      font-size: 3rem;
-      color: var(--teal);
-    }
-    .login-box .brand h1 {
-      font-size: 1.8rem;
-      color: #0B1A33;
-    }
-    .login-box .brand h1 span { color: var(--red); }
-    .login-box .brand p {
-      color: #888;
-      font-size: 0.9rem;
-    }
-    .login-box .form-group { margin-bottom: 1rem; }
-    .login-box .form-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-bottom: 0.2rem;
-    }
-    .login-box .form-group input {
-      width: 100%;
-      padding: 0.6rem 0.8rem;
-      border: 1.5px solid #D5D0C8;
-      border-radius: 6px;
-      font-family: inherit;
-    }
-    .login-box .form-group input:focus {
-      outline: none;
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px rgba(0,151,178,0.2);
-    }
-    .login-box .btn {
-      width: 100%;
-      padding: 0.8rem;
-      background: var(--teal);
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .login-box .btn:hover { background: var(--teal-dark); }
-    .login-box .error {
-      color: var(--red);
-      margin-top: 1rem;
-      text-align: center;
-    }
-
-    /* ----- MAIN APP LAYOUT ----- */
-    #appScreen {
-      display: none;
-      height: 100vh;
-      flex-direction: row;
-    }
-    .sidebar {
-      width: 240px;
-      background: #0B1A33;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      box-shadow: 2px 0 12px rgba(0,0,0,0.15);
-      z-index: 10;
-    }
-    .sidebar .brand {
-      padding: 1.2rem 1.2rem;
-      border-bottom: 3px solid var(--teal);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .sidebar .brand i {
-      font-size: 1.8rem;
-      color: var(--teal);
-    }
-    .sidebar .brand h1 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-    .sidebar .brand h1 span { color: var(--red); }
-    .sidebar .brand small {
-      display: block;
-      font-size: 0.6rem;
-      font-weight: 400;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 1px;
-    }
-    .sidebar nav {
-      flex: 1;
-      padding: 1rem 0.5rem;
-      overflow-y: auto;
-    }
-    .sidebar nav a {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      padding: 0.6rem 1rem;
-      border-radius: var(--radius);
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-      margin-bottom: 0.2rem;
-      cursor: pointer;
-    }
-    .sidebar nav a i { width: 1.2rem; text-align: center; }
-    .sidebar nav a:hover { background: rgba(255,255,255,0.08); color: white; }
-    .sidebar nav a.active {
-      background: var(--teal);
-      color: white;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,151,178,0.3);
-    }
-    .sidebar .footer {
-      padding: 1rem;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.3);
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-    .sidebar .user-info {
-      padding: 0.8rem 1.2rem;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.7);
-    }
-    .sidebar .user-info strong { color: white; }
-    .sidebar .logout-btn {
-      background: var(--red);
-      color: white;
-      border: none;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 0.3rem;
-      font-size: 0.75rem;
-      transition: 0.2s;
-    }
-    .sidebar .logout-btn:hover { background: var(--red-dark); }
-
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .main .topbar {
-      background: white;
-      padding: 0.8rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--gray);
-      flex-shrink: 0;
-    }
-    .main .topbar .page-title {
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: #0B1A33;
-    }
-    .main .topbar .actions { display: flex; gap: 0.8rem; }
-    .main .topbar .actions button {
-      background: var(--teal);
-      color: white;
-      border: none;
-      padding: 0.4rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .main .topbar .actions button:hover { background: var(--red); }
-    .main .content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem 2rem 2rem;
-    }
-
-    /* ----- DASHBOARD CARDS ----- */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .stat-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 1rem 1.2rem;
-      box-shadow: var(--shadow);
-      border-left: 4px solid var(--teal);
-    }
-    .stat-card .label { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 600; }
-    .stat-card .value { font-size: 1.8rem; font-weight: 800; color: #0B1A33; }
-    .stat-card .sub { font-size: 0.75rem; color: #999; }
-
-    .dash-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 1.5rem;
-    }
-    .dash-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 1.2rem 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .dash-card h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #0B1A33;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .dash-card h3 i { color: var(--teal); }
-
-    /* ----- TABLES ----- */
-    .table-wrap { overflow-x: auto; margin-top: 0.5rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 600px; }
-    table th { background: #0B1A33; color: white; padding: 0.5rem 0.7rem; text-align: left; font-weight: 600; white-space: nowrap; }
-    table td { padding: 0.4rem 0.7rem; border-bottom: 1px solid #EDEAE4; }
-    table tr:hover td { background: #F8F6F2; }
-
-    .badge {
-      display: inline-block;
-      padding: 0.1rem 0.6rem;
-      border-radius: 30px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .badge.Planned { background: #E0E0E0; color: #555; }
-    .badge.Ready { background: #D1ECF1; color: #0C5460; }
-    .badge.In-Progress { background: #FFF3CD; color: #856404; }
-    .badge.Blocked { background: #F8D7DA; color: #721C24; }
-    .badge.Completed { background: #D4EDDA; color: #155724; }
-    .badge.Verified { background: #C5D8E8; color: #1E3A6F; }
-    .badge.Approved { background: #D4EDDA; color: #155724; }
-    .badge.Rejected { background: #F8D7DA; color: #721C24; }
-    .badge.Pending { background: #FFF3CD; color: #856404; }
-    .badge.Generated { background: #C5D8E8; color: #1E3A6F; }
-    .badge.Issue { background: #F8D7DA; color: #721C24; }
-    .badge.Return { background: #D4EDDA; color: #155724; }
-
-    .progress-bar {
-      width: 60px;
-      height: 6px;
-      background: #EDEAE4;
-      border-radius: 10px;
-      display: inline-block;
-      overflow: hidden;
-      vertical-align: middle;
-    }
-    .progress-bar .fill {
-      height: 100%;
-      background: var(--teal);
-      border-radius: 10px;
-      transition: width 0.3s;
-    }
-
-    .action-btn {
-      background: transparent;
-      border: none;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: 0.2s;
-    }
-    .action-btn.edit { color: #0B1A33; }
-    .action-btn.edit:hover { background: #E0E0E0; }
-    .action-btn.delete { color: var(--red); }
-    .action-btn.delete:hover { background: #F8D7DA; }
-
-    /* ----- MODALS ----- */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(11,26,51,0.6);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      padding: 1rem;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal-box {
-      background: white;
-      border-radius: var(--radius);
-      max-width: 700px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 1.8rem 2rem;
-      animation: modalIn 0.25s ease;
-    }
-    @keyframes modalIn { 0% { opacity:0; transform: scale(0.95) translateY(10px); } 100% { opacity:1; transform: scale(1) translateY(0); } }
-    .modal-box .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.2rem;
-    }
-    .modal-box .modal-header h2 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #0B1A33;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .modal-box .modal-header h2 i { color: var(--teal); }
-    .modal-close {
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #AAA;
-      padding: 0 0.5rem;
-    }
-    .modal-close:hover { color: var(--red); }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-bottom: 0.2rem;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 0.5rem 0.8rem;
-      border: 1.5px solid #D5D0C8;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.9rem;
-    }
-    .form-group input:focus, .form-group select:focus {
-      outline: none;
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px rgba(0,151,178,0.2);
-    }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .modal-footer {
-      display: flex;
-      gap: 0.8rem;
-      justify-content: flex-end;
-      margin-top: 1.5rem;
-    }
-    .btn {
-      padding: 0.5rem 1.4rem;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      border: none;
-      cursor: pointer;
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .btn-primary { background: var(--teal); color: white; }
-    .btn-primary:hover { background: var(--teal-dark); }
-    .btn-danger { background: var(--red); color: white; }
-    .btn-danger:hover { background: var(--red-dark); }
-    .btn-secondary { background: #E5E2DC; color: #333; }
-    .btn-secondary:hover { background: #D5D0C8; }
-    .btn-success { background: #2D8F5C; color: white; }
-    .btn-success:hover { background: #1E7B4A; }
-
-    /* ----- TOASTS ----- */
-    .toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .toast {
-      background: #0B1A33;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border-radius: var(--radius);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      font-weight: 500;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      animation: slideUp 0.3s ease;
-      border-left: 4px solid var(--teal);
-    }
-    .toast.success { border-left-color: #2D8F5C; }
-    .toast.error { border-left-color: var(--red); }
-    @keyframes slideUp { 0% { opacity:0; transform: translateY(20px); } 100% { opacity:1; transform: translateY(0); } }
-
-    /* ----- SUB-NAV TABS ----- */
-    .subnav {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--gray);
-      padding-bottom: 0.5rem;
-    }
-    .subnav button {
-      background: transparent;
-      border: none;
-      padding: 0.4rem 1rem;
-      font-weight: 600;
-      color: #888;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: 0.2s;
-    }
-    .subnav button:hover { background: #f0f0f0; }
-    .subnav button.active {
-      background: var(--teal);
-      color: white;
-    }
-    .panel { display: none; }
-    .panel.active { display: block; }
-
-    /* ----- RESPONSIVE ----- */
-    @media (max-width: 768px) {
-      .sidebar { width: 60px; }
-      .sidebar .brand h1, .sidebar .brand small, .sidebar nav a span, .sidebar .footer, .sidebar .user-info { display: none; }
-      .sidebar nav a { justify-content: center; padding: 0.6rem; }
-      .sidebar .brand { justify-content: center; }
-      .main .content { padding: 1rem; }
-      .dash-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
-    .text-center { text-align: center; }
-    .hidden { display: none !important; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BALSONS PROJECT MANAGER</title>
+<style>
+:root{--teal:#0097B2;--teal-dark:#007A8F;--red:#E64646;--navy:#0B1A33;--bg:#F0EDE8;--surface:#FFF;--text:#1A1A1A;--muted:#888;--border:#E5E2DC;--shadow:0 6px 24px rgba(0,0,0,.12);--radius:12px;--sidebar-w:250px}
+[data-theme=dark]{--bg:#0d1117;--surface:#161b22;--text:#e6edf3;--muted:#8b949e;--border:#30363d;--navy:#010409;--shadow:0 6px 24px rgba(0,0,0,.4)}
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+.hidden{display:none!important}.text-muted{color:var(--muted)}.text-red{color:var(--red)}.text-teal{color:var(--teal)}.text-center{text-align:center}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy)}
+.login-box{background:var(--surface);padding:2.5rem;border-radius:16px;max-width:420px;width:100%;box-shadow:var(--shadow)}
+.login-box .brand{text-align:center;margin-bottom:1.5rem}.login-box .brand svg{height:56px;margin-bottom:.5rem}
+.login-box .brand h1{font-size:1.5rem;color:var(--navy)}[data-theme=dark] .login-box .brand h1{color:var(--text)}
+.login-box .brand h1 span{color:var(--red)}.login-box .brand p{color:var(--muted);font-size:.9rem}
+.login-hint{margin-top:1rem;padding:.75rem;background:rgba(0,151,178,.08);border-radius:8px;font-size:.75rem;color:var(--muted)}
+.login-hint code{color:var(--teal);font-weight:600}
+#appScreen{display:none;height:100vh}#appScreen.active{display:flex}
+.sidebar{width:var(--sidebar-w);background:var(--navy);color:#fff;display:flex;flex-direction:column;flex-shrink:0}
+.sidebar .brand{padding:1rem;border-bottom:3px solid var(--teal);display:flex;align-items:center;gap:.6rem}
+.sidebar .brand svg{height:36px}.sidebar .brand h1{font-size:.95rem;font-weight:800}.sidebar .brand h1 span{color:var(--red)}
+.sidebar .brand small{display:block;font-size:.55rem;color:rgba(255,255,255,.5)}
+.sidebar nav{flex:1;padding:.75rem .4rem;overflow-y:auto}
+.sidebar nav a{display:flex;align-items:center;gap:.6rem;padding:.55rem .8rem;border-radius:var(--radius);color:rgba(255,255,255,.7);text-decoration:none;font-size:.82rem;margin-bottom:.15rem;cursor:pointer}
+.sidebar nav a .ico{width:1.1rem;text-align:center}.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:var(--teal);color:#fff;font-weight:600}
+.sidebar .user-info{padding:.75rem 1rem;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem}
+.sidebar .logout-btn{background:var(--red);color:#fff;border:none;padding:.35rem .8rem;border-radius:20px;font-weight:600;cursor:pointer;margin-top:.3rem;font-size:.72rem}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--surface);padding:.7rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.topbar .page-title{font-weight:700;font-size:1.1rem}.topbar-right{display:flex;align-items:center;gap:.6rem}
+.search-box{display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:.3rem .8rem;min-width:220px;position:relative}
+.search-box input{border:none;background:transparent;outline:none;font:inherit;width:100%;color:var(--text)}
+.search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;max-height:240px;overflow-y:auto;z-index:100;box-shadow:var(--shadow)}
+.search-results div{padding:.5rem .8rem;cursor:pointer;border-bottom:1px solid var(--border);font-size:.8rem}
+.search-results div:hover{background:rgba(0,151,178,.08)}
+.content{flex:1;overflow-y:auto;padding:1.25rem 1.5rem 2rem}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:1.25rem}
+.stat-card{background:var(--surface);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);border-left:4px solid var(--teal)}
+.stat-card .label{font-size:.68rem;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stat-card .value{font-size:1.6rem;font-weight:800}.stat-card .sub{font-size:.72rem;color:var(--muted)}
+.card{background:var(--surface);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow);margin-bottom:1rem}
+.card h3{font-size:.95rem;margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem}
+.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:1rem}
+.btn{padding:.45rem 1.1rem;border-radius:30px;font-weight:600;font-size:.8rem;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem}
+.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:#007A8F}
+.btn-danger{background:var(--red);color:#fff}.btn-secondary{background:var(--border);color:var(--text)}.btn-sm{padding:.3rem .7rem;font-size:.72rem}
+.btn-icon{padding:.35rem .5rem;border-radius:6px;background:transparent;border:1px solid var(--border);cursor:pointer}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:500px}
+table th{background:var(--navy);color:#fff;padding:.45rem .6rem;text-align:left}
+table td{padding:.4rem .6rem;border-bottom:1px solid var(--border)}
+.badge{display:inline-block;padding:.1rem .5rem;border-radius:30px;font-size:.62rem;font-weight:700;text-transform:uppercase}
+.badge-Planned,.badge-Draft{background:#E0E0E0;color:#555}
+.badge-In-Progress,.badge-Pending,.badge-Monitoring,.badge-Mitigating{background:#FFF3CD;color:#856404}
+.badge-Blocked,.badge-Open,.badge-Critical,.badge-Rejected{background:#F8D7DA;color:#721C24}
+.badge-Completed,.badge-Approved,.badge-Verified,.badge-Active,.badge-Submitted{background:#D4EDDA;color:#155724}
+.badge-High{background:#f5c6cb;color:#721c24}.badge-Medium{background:#ffeeba;color:#856404}.badge-Low{background:#d4edda;color:#155724}
+.form-group{margin-bottom:.8rem}.form-group label{display:block;font-weight:600;font-size:.75rem;margin-bottom:.15rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.45rem .7rem;border:1.5px solid var(--border);border-radius:6px;font:inherit;background:var(--surface);color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(11,26,51,.6);display:none;align-items:center;justify-content:center;z-index:999;padding:1rem}
+.modal-overlay.open{display:flex}.modal-box{background:var(--surface);border-radius:var(--radius);max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:1.5rem}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.modal-close{font-size:1.4rem;cursor:pointer;background:none;border:none;color:var(--muted)}
+.toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:.4rem}
+.toast{background:var(--navy);color:#fff;padding:.55rem 1rem;border-radius:var(--radius);font-size:.82rem;border-left:4px solid var(--teal)}
+.toast.success{border-left-color:#2D8F5C}.toast.error{border-left-color:var(--red)}
+.subnav{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
+.subnav button{background:transparent;border:none;padding:.35rem .8rem;font-weight:600;color:var(--muted);cursor:pointer;border-radius:20px}
+.subnav button.active{background:var(--teal);color:#fff}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.donut-wrap{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;justify-content:center;padding:1rem}
+.donut{width:180px;height:180px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.donut::after{content:'';position:absolute;width:110px;height:110px;border-radius:50%;background:var(--surface)}
+.donut-label{position:relative;z-index:1;font-weight:800;font-size:1.3rem;color:var(--teal)}
+.donut-legend{font-size:.8rem;display:flex;flex-direction:column;gap:.35rem}
+.bar-chart{display:flex;align-items:flex-end;gap:.4rem;height:200px;padding:1rem 0}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;min-width:36px}
+.bar-stack{width:100%;max-width:44px;display:flex;flex-direction:column-reverse;gap:2px;height:150px}
+.bar-seg{width:100%;border-radius:3px 3px 0 0}
+.bar-label{font-size:.6rem;text-align:center;color:var(--muted)}
+.progress-bar{background:var(--border);border-radius:4px;height:8px;width:100px}.progress-bar>div{height:100%;border-radius:4px;background:var(--teal)}
+@media(max-width:900px){.dash-grid{grid-template-columns:1fr}.sidebar{width:64px}.sidebar .brand div,.sidebar nav a span,.sidebar .user-info{display:none}}
+@media print{.sidebar,.topbar,.btn,.modal-overlay,.toast-container,.subnav{display:none!important}.content{padding:0}body{overflow:visible;background:#fff}.print-header{display:block!important;margin-bottom:1rem;border-bottom:2px solid var(--teal)}}
+.print-header{display:none}
+</style>
 </head>
 <body>
-
-  <!-- ============================================================
-       LOGIN SCREEN
-  ============================================================ -->
-  <div id="loginScreen">
-    <div class="login-box">
-      <div class="brand">
-        <i class="fas fa-cog"></i>
-        <h1>BALSONS <span>·</span> JUPITER</h1>
-        <p>Project Management Suite</p>
-      </div>
-      <form id="loginForm" onsubmit="login(event)">
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="loginUsername" placeholder="Enter username" required>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="loginPassword" placeholder="Enter password" required>
-        </div>
-        <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-        <div id="loginError" class="error"></div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       MAIN APP
-  ============================================================ -->
-  <div id="appScreen">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="brand">
-        <i class="fas fa-cog"></i>
-        <div>
-          <h1>BALSONS <span>·</span> JUPITER</h1>
-          <small>PROJECT SUITE</small>
-        </div>
-      </div>
-      <nav>
-        <a class="active" data-page="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a>
-        <a data-page="project"><i class="fas fa-tasks"></i><span>Project Manager</span></a>
-        <a data-page="tools"><i class="fas fa-toolbox"></i><span>Tools / Store</span></a>
-        <a data-page="hrms"><i class="fas fa-user-cog"></i><span>HRMS · ERP · Payroll</span></a>
-      </nav>
-      <div class="user-info">
-        <div><strong id="userName">User</strong></div>
-        <div style="font-size:0.7rem; color:rgba(255,255,255,0.5);" id="userRole">role</div>
-        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </div>
-      <div class="footer">v5.0 · Balsons Heavy Lift</div>
-    </aside>
-
-    <!-- Main content -->
-    <div class="main">
-      <div class="topbar">
-        <div class="page-title" id="pageTitle">Dashboard</div>
-        <div class="actions">
-          <button id="refreshBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
-        </div>
-      </div>
-      <div class="content" id="contentArea">
-        <div class="text-center" style="padding: 3rem;"><i class="fas fa-spinner fa-spin fa-2x"></i> Loading...</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       MODAL
-  ============================================================ -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h2 id="modalTitle"><i class="fas fa-pen"></i> Edit</h2>
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-      </div>
-      <form id="modalForm" onsubmit="handleModalSubmit(event)">
-        <div id="modalFields"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="modalSubmitBtn"><i class="fas fa-save"></i> Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       TOAST CONTAINER
-  ============================================================ -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- ============================================================
-       JAVASCRIPT
-  ============================================================ -->
-  <script>
-    // ================================================================
-    //  CONFIGURATION – REPLACE WITH YOUR GAS DEPLOYMENT URLs
-    // ================================================================
-      const API_BASE_PROJECT = 'https://script.google.com/macros/s/AKfycbyj1KOerxA0xQsX9DddhpAR8X6CSxt_TC9TYBszHT1dYcvYdNoqNRJ9HW9oFQst5TX_Nw/exec';
-    const API_BASE_TOOLS = 'https://script.google.com/macros/s/AKfycbzioH4shdIafsOZ77YmqUOocmYQ5Xq64uEfkE0XeMbLvTN-N-5U-GXFJUEEYYaulbS7-Q/exec';
-    const API_BASE_HRMS = 'https://script.google.com/macros/s/AKfycbzJezsW9WTozgTVMkmrlY9lQ_xRBdEtBewxSAwoaHEuu5AskFm6bomycvAR0nc7h76u/exec';
-    // ================================================================
-    //  AUTHENTICATION
-    // ================================================================
-    let authToken = null;
-    let currentUser = null;
-
-    async function login(e) {
-      e.preventDefault();
-      const username = document.getElementById('loginUsername').value;
-      const password = document.getElementById('loginPassword').value;
-      const errorDiv = document.getElementById('loginError');
-      errorDiv.textContent = '';
-      try {
-        const response = await fetch(API_BASE_HRMS, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'login', username, password }),
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const result = await response.json();
-        if (result.success) {
-          authToken = result.data.token;
-          currentUser = result.data.user;
-          localStorage.setItem('balsons_token', authToken);
-          localStorage.setItem('balsons_user', JSON.stringify(currentUser));
-          showApp();
-        } else {
-          errorDiv.textContent = result.error || 'Login failed';
-        }
-      } catch (err) {
-        errorDiv.textContent = 'Network error. Please try again.';
-      }
-    }
-
-    function logout() {
-      localStorage.removeItem('balsons_token');
-      localStorage.removeItem('balsons_user');
-      authToken = null;
-      currentUser = null;
-      document.getElementById('appScreen').style.display = 'none';
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('loginUsername').value = '';
-      document.getElementById('loginPassword').value = '';
-      document.getElementById('loginError').textContent = '';
-    }
-
-    function checkSession() {
-      const token = localStorage.getItem('balsons_token');
-      const user = localStorage.getItem('balsons_user');
-      if (token && user) {
-        authToken = token;
-        currentUser = JSON.parse(user);
-        // Optionally validate token with HRMS
-        showApp();
-      } else {
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('appScreen').style.display = 'none';
-      }
-    }
-
-    function showApp() {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('appScreen').style.display = 'flex';
-      // Update user info
-      document.getElementById('userName').textContent = currentUser.fullName || currentUser.username;
-      document.getElementById('userRole').textContent = currentUser.role;
-      // Load dashboard by default
-      loadPage('dashboard');
-    }
-
-    // ================================================================
-    //  API CALL HELPER
-    // ================================================================
-    async function apiCall(baseUrl, action, payload) {
-      const response = await fetch(baseUrl, {
-        method: 'POST',
-        body: JSON.stringify({ token: authToken, action, payload: payload || {} }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const result = await response.json();
-      if (!result.success) {
-        if (result.error && result.error.includes('Invalid or expired token')) {
-          logout();
-          throw new Error('Session expired. Please log in again.');
-        }
-        throw new Error(result.error || 'Unknown error');
-      }
-      return result.data;
-    }
-
-    // Module-specific wrappers
-    function projectApi(action, payload) { return apiCall(API_BASE_PROJECT, action, payload); }
-    function toolsApi(action, payload) { return apiCall(API_BASE_TOOLS, action, payload); }
-    function hrmsApi(action, payload) { return apiCall(API_BASE_HRMS, action, payload); }
-
-    // ================================================================
-    //  NAVIGATION
-    // ================================================================
-    let currentPage = 'dashboard';
-
-    document.querySelectorAll('.sidebar nav a').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
-        this.classList.add('active');
-        const page = this.dataset.page;
-        currentPage = page;
-        document.getElementById('pageTitle').textContent = this.textContent.trim();
-        loadPage(page);
-      });
-    });
-
-    document.getElementById('refreshBtn').addEventListener('click', () => {
-      loadPage(currentPage);
-      toast('Refreshed');
-    });
-
-    function loadPage(page) {
-      const area = document.getElementById('contentArea');
-      area.innerHTML = '<div class="text-center" style="padding: 2rem;"><i class="fas fa-spinner fa-spin fa-2x"></i></div>';
-      switch(page) {
-        case 'dashboard': loadDashboard(); break;
-        case 'project': loadProject(); break;
-        case 'tools': loadTools(); break;
-        case 'hrms': loadHRMS(); break;
-        default: area.innerHTML = '<p>Page not found.</p>';
-      }
-    }
-
-    // ================================================================
-    //  DASHBOARD
-    // ================================================================
-    async function loadDashboard() {
-      try {
-        // For dashboard, we need aggregated data from all modules.
-        // We'll fetch tasks from Project and employees from HRMS.
-        const [tasks, employees, inventory] = await Promise.all([
-          projectApi('getTasks'),
-          hrmsApi('getEmployees'),
-          toolsApi('getInventory')
-        ]);
-        const totalTasks = tasks.length;
-        const completed = tasks.filter(t => t.status === 'Completed' || t.status === 'Verified').length;
-        const blocked = tasks.filter(t => t.status === 'Blocked').length;
-        const totalEmployees = employees.length;
-        const totalTools = inventory.length;
-
-        const area = document.getElementById('contentArea');
-        area.innerHTML = `
-          <div class="stats-grid">
-            <div class="stat-card"><div class="label">Total Tasks</div><div class="value">${totalTasks}</div><div class="sub">${completed} completed</div></div>
-            <div class="stat-card"><div class="label">Blocked Tasks</div><div class="value" style="color:var(--red);">${blocked}</div><div class="sub">Needs attention</div></div>
-            <div class="stat-card"><div class="label">Employees</div><div class="value">${totalEmployees}</div><div class="sub">Active workforce</div></div>
-            <div class="stat-card"><div class="label">Tools Inventory</div><div class="value">${totalTools}</div><div class="sub">Items in stock</div></div>
-          </div>
-          <div class="dash-grid">
-            <div class="dash-card">
-              <h3><i class="fas fa-tasks"></i> Recent Tasks</h3>
-              ${tasks.slice(0,5).map(t => `
-                <div style="display:flex; justify-content:space-between; padding:0.3rem 0; border-bottom:1px solid #f0f0f0;">
-                  <span>${t.name}</span>
-                  <span class="badge ${t.status.replace(' ', '-')}">${t.status}</span>
-                </div>
-              `).join('')}
-              ${tasks.length === 0 ? '<p>No tasks yet.</p>' : ''}
-            </div>
-            <div class="dash-card">
-              <h3><i class="fas fa-users"></i> Quick Actions</h3>
-              <button class="btn btn-primary" style="width:100%; margin-bottom:0.5rem;" onclick="navigateTo('project')"><i class="fas fa-plus"></i> Add Task</button>
-              <button class="btn btn-primary" style="width:100%; margin-bottom:0.5rem; background:var(--teal-dark);" onclick="navigateTo('tools')"><i class="fas fa-exchange-alt"></i> Issue Tool</button>
-              <button class="btn btn-primary" style="width:100%; background:#2D8F5C;" onclick="navigateTo('hrms')"><i class="fas fa-user-plus"></i> Add Employee</button>
-            </div>
-          </div>
-        `;
-      } catch (err) {
-        showError('Dashboard', err.message);
-      }
-    }
-
-    function navigateTo(page) {
-      document.querySelectorAll('.sidebar nav a').forEach(a => {
-        a.classList.toggle('active', a.dataset.page === page);
-      });
-      currentPage = page;
-      document.getElementById('pageTitle').textContent = document.querySelector(`.sidebar nav a[data-page="${page}"]`).textContent.trim();
-      loadPage(page);
-    }
-
-    // ================================================================
-    //  PROJECT MANAGEMENT
-    // ================================================================
-    let projectTab = 'tasks';
-
-    function loadProject() {
-      const area = document.getElementById('contentArea');
-      area.innerHTML = `
-        <div class="subnav">
-          <button class="active" data-tab="tasks" onclick="switchProjectTab('tasks')"><i class="fas fa-list"></i> Tasks</button>
-          <button data-tab="schedule" onclick="switchProjectTab('schedule')"><i class="fas fa-calendar-alt"></i> Schedule</button>
-          <button data-tab="resources" onclick="switchProjectTab('resources')"><i class="fas fa-boxes"></i> Resources</button>
-          <button data-tab="risks" onclick="switchProjectTab('risks')"><i class="fas fa-exclamation-triangle"></i> Risks</button>
-          <button data-tab="commercial" onclick="switchProjectTab('commercial')"><i class="fas fa-money-bill-wave"></i> Commercial</button>
-        </div>
-        <div id="projectPanels">
-          <div class="panel active" id="panel-tasks">Loading tasks...</div>
-          <div class="panel" id="panel-schedule">Loading schedule...</div>
-          <div class="panel" id="panel-resources">Loading resources...</div>
-          <div class="panel" id="panel-risks">Loading risks...</div>
-          <div class="panel" id="panel-commercial">Loading commercial...</div>
-        </div>
-      `;
-      switchProjectTab('tasks');
-    }
-
-    async function switchProjectTab(tab) {
-      projectTab = tab;
-      document.querySelectorAll('.subnav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      const panel = document.getElementById('panel-' + tab);
-      panel.classList.add('active');
-      try {
-        if (tab === 'tasks') await loadTasksUI();
-        else if (tab === 'schedule') await loadReadonly('schedule', 'getSchedule');
-        else if (tab === 'resources') await loadReadonly('resources', 'getResources');
-        else if (tab === 'risks') await loadReadonly('risks', 'getRisks');
-        else if (tab === 'commercial') await loadReadonly('commercial', 'getCommercial');
-      } catch (err) {
-        panel.innerHTML = `<p style="color:var(--red);">Error: ${err.message}</p>`;
-      }
-    }
-
-    async function loadReadonly(panelId, action) {
-      const panel = document.getElementById('panel-' + panelId);
-      const data = await projectApi(action);
-      if (!data || data.length === 0) {
-        panel.innerHTML = '<p>No data available.</p>';
-        return;
-      }
-      const headers = data[0];
-      let html = `<div class="table-wrap"><table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-      for (let i=1; i<data.length; i++) {
-        const row = data[i];
-        if (row.every(cell => cell.toString().trim() === '')) continue;
-        html += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
-      }
-      html += `</tbody></table></div>`;
-      panel.innerHTML = html;
-    }
-
-    // ---------- TASKS ----------
-    let tasksData = [];
-
-    async function loadTasksUI() {
-      tasksData = await projectApi('getTasks');
-      renderTasks();
-    }
-
-    function renderTasks() {
-      const container = document.getElementById('panel-tasks');
-      let html = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-          <button class="btn btn-primary" onclick="openTaskModal()"><i class="fas fa-plus"></i> Add Task</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Task</th><th>EPIC</th><th>Assigned</th><th>Status</th><th>Progress</th><th>Start</th><th>End</th><th>Actions</th></tr></thead>
-            <tbody>
-              ${tasksData.map(t => `
-                <tr>
-                  <td>${t.id}</td>
-                  <td>${t.name}</td>
-                  <td>${t.epic.replace('E1: ','').replace('E2: ','').replace('E3: ','').replace('E4: ','').replace('E5: ','')}</td>
-                  <td>${t.assignedTo}</td>
-                  <td><span class="badge ${t.status.replace(' ', '-')}">${t.status}</span></td>
-                  <td>
-                    <div class="progress-bar"><div class="fill" style="width:${t.progress}%;"></div></div> ${t.progress}%
-                  </td>
-                  <td>${t.start}</td>
-                  <td>${t.end}</td>
-                  <td>
-                    <button class="action-btn edit" onclick="openTaskModal('${t.id}')"><i class="fas fa-edit"></i></button>
-                    <button class="action-btn delete" onclick="deleteTask('${t.id}')"><i class="fas fa-trash"></i></button>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-      container.innerHTML = html;
-    }
-
-    function openTaskModal(id) {
-      const task = id ? tasksData.find(t => t.id === id) : null;
-      const isEdit = !!task;
-      document.getElementById('modalTitle').innerHTML = `<i class="fas fa-${isEdit ? 'pen' : 'plus'}"></i> ${isEdit ? 'Edit' : 'Add'} Task`;
-      document.getElementById('modalFields').innerHTML = `
-        <input type="hidden" id="taskId" value="${task ? task.id : ''}">
-        <div class="form-row">
-          <div class="form-group"><label>Task Name</label><input type="text" id="taskName" value="${task ? task.name : ''}" required></div>
-          <div class="form-group"><label>EPIC</label>
-            <select id="taskEpic">${['E1: Preparation','E2: Axle Line','E3: Wheel Line','E4: Integration','E5: Handover'].map(e => `<option value="${e}" ${task && task.epic === e ? 'selected' : ''}>${e}</option>`).join('')}</select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Assigned To</label><input type="text" id="taskAssigned" value="${task ? task.assignedTo : ''}"></div>
-          <div class="form-group"><label>Status</label>
-            <select id="taskStatus">${['Planned','Ready','In Progress','Blocked','Completed','Verified'].map(s => `<option value="${s}" ${task && task.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Start Date</label><input type="date" id="taskStart" value="${task ? task.start : ''}"></div>
-          <div class="form-group"><label>End Date</label><input type="date" id="taskEnd" value="${task ? task.end : ''}"></div>
-        </div>
-        <div class="form-group"><label>Progress (%)</label><input type="number" id="taskProgress" min="0" max="100" step="1" value="${task ? task.progress : 0}"></div>
-        <div class="form-group"><label>Dependency</label><input type="text" id="taskDependency" value="${task ? task.dependency : ''}"></div>
-      `;
-      document.getElementById('modalSubmitBtn').innerHTML = `<i class="fas fa-save"></i> ${isEdit ? 'Update' : 'Save'}`;
-      document.getElementById('modalOverlay').classList.add('open');
-    }
-
-    async function deleteTask(id) {
-      if (!confirm('Delete task ' + id + '?')) return;
-      try {
-        await projectApi('deleteTask', { id });
-        toast('Task deleted', 'success');
-        loadTasksUI();
-      } catch (err) {
-        toast('Error: ' + err.message, 'error');
-      }
-    }
-
-    // ================================================================
-    //  TOOLS / STORE MANAGEMENT
-    // ================================================================
-    let toolsTab = 'inventory';
-
-    function loadTools() {
-      const area = document.getElementById('contentArea');
-      area.innerHTML = `
-        <div class="subnav">
-          <button class="active" data-tab="inventory" onclick="switchToolsTab('inventory')"><i class="fas fa-cubes"></i> Inventory</button>
-          <button data-tab="equipment" onclick="switchToolsTab('equipment')"><i class="fas fa-cogs"></i> Equipment</button>
-          <button data-tab="transactions" onclick="switchToolsTab('transactions')"><i class="fas fa-exchange-alt"></i> Transactions</button>
-        </div>
-        <div id="toolsPanels">
-          <div class="panel active" id="panel-inventory">Loading inventory...</div>
-          <div class="panel" id="panel-equipment">Loading equipment...</div>
-          <div class="panel" id="panel-transactions">Loading transactions...</div>
-        </div>
-      `;
-      switchToolsTab('inventory');
-    }
-
-    async function switchToolsTab(tab) {
-      toolsTab = tab;
-      document.querySelectorAll('.subnav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      const panel = document.getElementById('panel-' + tab);
-      panel.classList.add('active');
-      try {
-        if (tab === 'inventory') await loadInventory();
-        else if (tab === 'equipment') await loadEquipmentUI();
-        else if (tab === 'transactions') await loadTransactionsUI();
-      } catch (err) {
-        panel.innerHTML = `<p style="color:var(--red);">Error: ${err.message}</p>`;
-      }
-    }
-
-    let inventoryData = [];
-    async function loadInventory() {
-      inventoryData = await toolsApi('getInventory');
-      const container = document.getElementById('panel-inventory');
-      let html = `
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Spec</th><th>Total</th><th>Available</th><th>Unit</th><th>Location</th><th>Supplier</th><th>Last Update</th></tr></thead>
-            <tbody>
-              ${inventoryData.map(t => `
-                <tr>
-                  <td>${t.id}</td>
-                  <td>${t.name}</td>
-                  <td>${t.category}</td>
-                  <td>${t.spec}</td>
-                  <td>${t.totalQty}</td>
-                  <td>${t.availableQty}</td>
-                  <td>${t.unit}</td>
-                  <td>${t.location}</td>
-                  <td>${t.supplier}</td>
-                  <td>${t.lastUpdate}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-      container.innerHTML = html;
-    }
-
-    let equipmentData = [];
-    async function loadEquipmentUI() {
-      equipmentData = await toolsApi('getEquipment');
-      const container = document.getElementById('panel-equipment');
-      let html = `
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Make</th><th>Qty</th><th>Responsible</th><th>Status</th><th>Location</th></tr></thead>
-            <tbody>
-              ${equipmentData.map(e => `
-                <tr>
-                  <td>${e.id}</td>
-                  <td>${e.name}</td>
-                  <td>${e.make}</td>
-                  <td>${e.qty}</td>
-                  <td>${e.responsible}</td>
-                  <td><span class="badge ${e.status === 'Installed' ? 'Completed' : 'In-Progress'}">${e.status}</span></td>
-                  <td>${e.location}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-      container.innerHTML = html;
-    }
-
-    let transactionsData = [];
-    async function loadTransactionsUI() {
-      transactionsData = await toolsApi('getTransactions');
-      const container = document.getElementById('panel-transactions');
-      let html = `
-        <div style="display:flex; justify-content:flex-end; margin-bottom:1rem;">
-          <button class="btn btn-primary" onclick="openTransactionModal()"><i class="fas fa-plus"></i> Add Transaction</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Date</th><th>Item ID</th><th>Item Name</th><th>Type</th><th>Qty</th><th>Issued To</th><th>Returned By</th><th>Remarks</th></tr></thead>
-            <tbody>
-              ${transactionsData.map(tr => `
-                <tr>
-                  <td>${tr.date}</td>
-                  <td>${tr.itemId}</td>
-                  <td>${tr.itemName}</td>
-                  <td><span class="badge ${tr.type === 'Issue' ? 'Issue' : 'Return'}">${tr.type}</span></td>
-                  <td>${tr.qty}</td>
-                  <td>${tr.issuedTo || '-'}</td>
-                  <td>${tr.returnedBy || '-'}</td>
-                  <td>${tr.remarks || '-'}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-      container.innerHTML = html;
-    }
-
-    function openTransactionModal() {
-      document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> Add Transaction';
-      document.getElementById('modalFields').innerHTML = `
-        <div class="form-row">
-          <div class="form-group"><label>Date</label><input type="date" id="trDate" value="${new Date().toISOString().split('T')[0]}"></div>
-          <div class="form-group"><label>Item ID</label><input type="text" id="trItemId" placeholder="e.g. T001"></div>
-        </div>
-        <div class="form-group"><label>Item Name</label><input type="text" id="trItemName"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Type</label>
-            <select id="trType"><option value="Issue">Issue</option><option value="Return">Return</option></select>
-          </div>
-          <div class="form-group"><label>Quantity</label><input type="number" id="trQty" value="1"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Issued To</label><input type="text" id="trIssuedTo"></div>
-          <div class="form-group"><label>Returned By</label><input type="text" id="trReturnedBy"></div>
-        </div>
-        <div class="form-group"><label>Remarks</label><input type="text" id="trRemarks"></div>
-      `;
-      document.getElementById('modalSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Save';
-      document.getElementById('modalOverlay').classList.add('open');
-    }
-
-    // ================================================================
-    //  HRMS – ERP – PAYROLL
-    // ================================================================
-    let hrmsTab = 'employees';
-    let employeesData = [];
-
-    function loadHRMS() {
-      const area = document.getElementById('contentArea');
-      area.innerHTML = `
-        <div class="subnav">
-          <button class="active" data-tab="employees" onclick="switchHRMS('employees')"><i class="fas fa-user"></i> Employees</button>
-          <button data-tab="attendance" onclick="switchHRMS('attendance')"><i class="fas fa-calendar-check"></i> Attendance</button>
-          <button data-tab="leave" onclick="switchHRMS('leave')"><i class="fas fa-calendar-alt"></i> Leave</button>
-          <button data-tab="payroll" onclick="switchHRMS('payroll')"><i class="fas fa-coins"></i> Payroll</button>
-          <button data-tab="recruitment" onclick="switchHRMS('recruitment')"><i class="fas fa-user-plus"></i> Recruitment</button>
-          <button data-tab="performance" onclick="switchHRMS('performance')"><i class="fas fa-star"></i> Performance</button>
-          <button data-tab="training" onclick="switchHRMS('training')"><i class="fas fa-chalkboard-teacher"></i> Training</button>
-        </div>
-        <div id="hrmsPanels">
-          <div class="panel active" id="panel-employees">Loading employees...</div>
-          <div class="panel" id="panel-attendance">Loading attendance...</div>
-          <div class="panel" id="panel-leave">Loading leave...</div>
-          <div class="panel" id="panel-payroll">Loading payroll...</div>
-          <div class="panel" id="panel-recruitment">Loading recruitment...</div>
-          <div class="panel" id="panel-performance">Loading performance...</div>
-          <div class="panel" id="panel-training">Loading training...</div>
-        </div>
-      `;
-      switchHRMS('employees');
-    }
-
-    async function switchHRMS(tab) {
-      hrmsTab = tab;
-      document.querySelectorAll('.subnav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      const panel = document.getElementById('panel-' + tab);
-      panel.classList.add('active');
-      try {
-        if (tab === 'employees') await loadEmployees();
-        else if (tab === 'attendance') await loadAttendanceUI();
-        else if (tab === 'leave') await loadLeaveUI();
-        else if (tab === 'payroll') await loadPayrollUI();
-        else if (tab === 'recruitment') await loadRecruitmentUI();
-        else if (tab === 'performance') await loadPerformanceUI();
-        else if (tab === 'training') await loadTrainingUI();
-      } catch (err) {
-        panel.innerHTML = `<p style="color:var(--red);">Error: ${err.message}</p>`;
-      }
-    }
-
-    // ---- Employees ----
-    async function loadEmployees() {
-      employeesData = await hrmsApi('getEmployees');
-      renderEmployees();
-    }
-
-    function renderEmployees() {
-      const container = document.getElementById('panel-employees');
-      let html = `
-        <div style="display:flex; justify-content:flex-end; margin-bottom:1rem;">
-          <button class="btn btn-primary" onclick="openEmployeeModal()"><i class="fas fa-plus"></i> Add Employee</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Squad</th><th>Phone</th><th>Email</th><th>Salary</th><th>Actions</th></tr></thead>
-            <tbody>
-              ${employeesData.map(e => `
-                <tr>
-                  <td>${e.id}</td>
-                  <td>${e.firstName} ${e.lastName}</td>
-                  <td>${e.role}</td>
-                  <td>${e.squad}</td>
-                  <td>${e.phone}</td>
-                  <td>${e.email}</td>
-                  <td>₹${e.salary.toLocaleString()}</td>
-                  <td>
-                    <button class="action-btn edit" onclick="openEmployeeModal('${e.id}')"><i class="fas fa-edit"></i></button>
-                    <button class="action-btn delete" onclick="deleteEmployee('${e.id}')"><i class="fas fa-trash"></i></button>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
-      container.innerHTML = html;
-    }
-
-    function openEmployeeModal(id) {
-      const emp = id ? employeesData.find(e => e.id === id) : null;
-      const isEdit = !!emp;
-      document.getElementById('modalTitle').innerHTML = `<i class="fas fa-${isEdit ? 'pen' : 'plus'}"></i> ${isEdit ? 'Edit' : 'Add'} Employee`;
-      document.getElementById('modalFields').innerHTML = `
-        <input type="hidden" id="empId" value="${emp ? emp.id : ''}">
-        <div class="form-row">
-          <div class="form-group"><label>First Name</label><input type="text" id="empFirstName" value="${emp ? emp.firstName : ''}" required></div>
-          <div class="form-group"><label>Last Name</label><input type="text" id="empLastName" value="${emp ? emp.lastName : ''}"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Email</label><input type="email" id="empEmail" value="${emp ? emp.email : ''}"></div>
-          <div class="form-group"><label>Phone</label><input type="text" id="empPhone" value="${emp ? emp.phone : ''}"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>DOB</label><input type="date" id="empDob" value="${emp ? emp.dob : ''}"></div>
-          <div class="form-group"><label>Gender</label>
-            <select id="empGender"><option value="Male" ${emp && emp.gender === 'Male' ? 'selected' : ''}>Male</option><option value="Female" ${emp && emp.gender === 'Female' ? 'selected' : ''}>Female</option><option value="Other">Other</option></select>
-          </div>
-        </div>
-        <div class="form-group"><label>Address</label><textarea id="empAddress">${emp ? emp.address : ''}</textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label>Emergency</label><input type="text" id="empEmergency" value="${emp ? emp.emergency : ''}"></div>
-          <div class="form-group"><label>Dependents</label><input type="text" id="empDependents" value="${emp ? emp.dependents : ''}"></div>
-        </div>
-        <div class="form-group"><label>Qualifications</label><input type="text" id="empQualifications" value="${emp ? emp.qualifications : ''}"></div>
-        <div class="form-group"><label>Experience</label><input type="text" id="empExperience" value="${emp ? emp.experience : ''}"></div>
-        <div class="form-group"><label>Documents</label><input type="text" id="empDocuments" value="${emp ? emp.documents : ''}"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Squad</label>
-            <select id="empSquad">${['Wheel Mech','Wheel Rig','Wheel Fluid','Wheel Elec','Wheel Weld','Axle Mech','Axle Rig','Axle Fluid','Axle Elec','Axle Weld'].map(s => `<option value="${s}" ${emp && emp.squad === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
-          </div>
-          <div class="form-group"><label>Role</label><input type="text" id="empRole" value="${emp ? emp.role : ''}"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Joining Date</label><input type="date" id="empJoining" value="${emp ? emp.joiningDate : ''}"></div>
-          <div class="form-group"><label>Salary (₹)</label><input type="number" id="empSalary" value="${emp ? emp.salary : 0}"></div>
-        </div>
-        <div class="form-group"><label>Bank Account</label><input type="text" id="empBank" value="${emp ? emp.bank : ''}"></div>
-      `;
-      document.getElementById('modalSubmitBtn').innerHTML = `<i class="fas fa-save"></i> ${isEdit ? 'Update' : 'Save'}`;
-      document.getElementById('modalOverlay').classList.add('open');
-    }
-
-    async function deleteEmployee(id) {
-      if (!confirm('Delete employee ' + id + '?')) return;
-      try {
-        await hrmsApi('deleteEmployee', { id });
-        toast('Employee deleted', 'success');
-        loadEmployees();
-      } catch (err) {
-        toast('Error: ' + err.message, 'error');
-      }
-    }
-
-    // ---- Attendance ----
-    async function loadAttendanceUI() {
-      const container = document.getElementById('panel-attendance');
-      // Ensure employeesData is loaded
-      if (employeesData.length === 0) await loadEmployees();
-      container.innerHTML = `
-        <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
-          <div><label>Date</label><input type="date" id="attDate" value="${new Date().toISOString().split('T')[0]}"></div>
-          <div><label>Employee</label><select id="attEmpId">${employeesData.map(e => `<option value="${e.id}">${e.firstName} ${e.lastName}</option>`).join('')}</select></div>
-          <div><label>Clock In</label><input type="time" id="attIn" value="08:00"></div>
-          <div><label>Clock Out</label><input type="time" id="attOut" value="17:00"></div>
-          <div><label>Overtime</label><input type="number" id="attOT" value="0" step="0.5"></div>
-          <div><label>Leave Type</label>
-            <select id="attLeave"><option value="">None</option><option value="Full Day">Full Day</option><option value="Half Day">Half Day</option></select>
-          </div>
-          <div><label>Remarks</label><input type="text" id="attRemarks"></div>
-          <div style="align-self:flex-end;"><button class="btn btn-primary" onclick="addAttendance()"><i class="fas fa-plus"></i> Add</button></div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Date</th><th>Employee</th><th>In</th><th>Out</th><th>Hours</th><th>OT</th><th>Leave</th><th>Remarks</th></tr></thead>
-            <tbody id="attBody"><tr><td colspan="8">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      `;
-      await loadAttendance();
-    }
-
-    async function loadAttendance() {
-      const month = new Date().toISOString().slice(0,7);
-      const data = await hrmsApi('getAttendance', { month });
-      const tbody = document.getElementById('attBody');
-      if (!tbody) return;
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8">No records.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = data.map(a => `
-        <tr>
-          <td>${a.date}</td>
-          <td>${a.empId}</td>
-          <td>${a.clockIn}</td>
-          <td>${a.clockOut}</td>
-          <td>${a.hours}</td>
-          <td>${a.overtime}</td>
-          <td>${a.leaveType || '-'}</td>
-          <td>${a.remarks || '-'}</td>
-        </tr>
-      `).join('');
-    }
-
-    async function addAttendance() {
-      const date = document.getElementById('attDate').value;
-      const empId = document.getElementById('attEmpId').value;
-      const clockIn = document.getElementById('attIn').value;
-      const clockOut = document.getElementById('attOut').value;
-      const overtime = parseFloat(document.getElementById('attOT').value) || 0;
-      const leaveType = document.getElementById('attLeave').value;
-      const remarks = document.getElementById('attRemarks').value.trim();
-      if (!date || !empId) return toast('Date and Employee required', 'error');
-      let hours = 0;
-      if (clockIn && clockOut) {
-        const [inH, inM] = clockIn.split(':').map(Number);
-        const [outH, outM] = clockOut.split(':').map(Number);
-        hours = (outH - inH) + (outM - inM) / 60;
-        if (hours < 0) hours += 24;
-      }
-      try {
-        await hrmsApi('addAttendance', { date, empId, clockIn, clockOut, hours, overtime, leaveType, remarks });
-        toast('Attendance added', 'success');
-        loadAttendance();
-      } catch (err) {
-        toast('Error: ' + err.message, 'error');
-      }
-    }
-
-    // ---- Leave ----
-    async function loadLeaveUI() {
-      const container = document.getElementById('panel-leave');
-      container.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-          <button class="btn btn-primary" onclick="openLeaveModal()"><i class="fas fa-plus"></i> Request Leave</button>
-          <select id="leaveFilter" onchange="loadLeaveRequests()"><option value="all">All</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option></select>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Employee</th><th>Type</th><th>Start</th><th>End</th><th>Days</th><th>Reason</th><th>Status</th><th>Approved By</th><th>Actions</th></tr></thead>
-            <tbody id="leaveBody"><tr><td colspan="10">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      `;
-      await loadLeaveRequests();
-    }
-
-    async function loadLeaveRequests() {
-      const status = document.getElementById('leaveFilter')?.value || 'all';
-      const data = await hrmsApi('getLeaveRequests', { status: status === 'all' ? null : status });
-      const tbody = document.getElementById('leaveBody');
-      if (!tbody) return;
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10">No requests.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = data.map(l => `
-        <tr>
-          <td>${l.id}</td>
-          <td>${l.empId}</td>
-          <td>${l.type}</td>
-          <td>${l.start}</td>
-          <td>${l.end}</td>
-          <td>${l.days}</td>
-          <td>${l.reason}</td>
-          <td><span class="badge ${l.status}">${l.status}</span></td>
-          <td>${l.approvedBy || '-'}</td>
-          <td>
-            ${l.status === 'Pending' ? `
-              <button class="action-btn edit" onclick="approveLeave('${l.id}','Approved')"><i class="fas fa-check"></i></button>
-              <button class="action-btn delete" onclick="approveLeave('${l.id}','Rejected')"><i class="fas fa-times"></i></button>
-            ` : '-'}
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function openLeaveModal() {
-      document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> Request Leave';
-      document.getElementById('modalFields').innerHTML = `
-        <div class="form-group"><label>Employee</label><select id="leaveEmpId">${employeesData.map(e => `<option value="${e.id}">${e.firstName} ${e.lastName}</option>`).join('')}</select></div>
-        <div class="form-group"><label>Leave Type</label>
-          <select id="leaveType"><option value="Casual">Casual</option><option value="Sick">Sick</option><option value="Earned">Earned</option><option value="Other">Other</option></select>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Start Date</label><input type="date" id="leaveStart"></div>
-          <div class="form-group"><label>End Date</label><input type="date" id="leaveEnd"></div>
-        </div>
-        <div class="form-group"><label>Reason</label><textarea id="leaveReason"></textarea></div>
-      `;
-      document.getElementById('modalSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Submit';
-      document.getElementById('modalOverlay').classList.add('open');
-    }
-
-    async function approveLeave(id, status) {
-      try {
-        await hrmsApi('updateLeaveStatus', { leaveId: id, status, approver: currentUser.fullName || 'Manager' });
-        toast(`Leave ${status}`, 'success');
-        loadLeaveRequests();
-      } catch (err) {
-        toast('Error: ' + err.message, 'error');
-      }
-    }
-
-    // ---- Payroll ----
-    async function loadPayrollUI() {
-      const container = document.getElementById('panel-payroll');
-      const now = new Date();
-      const month = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-      container.innerHTML = `
-        <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
-          <label>Month: <input type="month" id="payrollMonth" value="${month}"></label>
-          <button class="btn btn-success" onclick="runPayroll()"><i class="fas fa-calculator"></i> Generate</button>
-          <button class="btn btn-primary" onclick="viewPayroll()"><i class="fas fa-eye"></i> View</button>
-        </div>
-        <div id="payrollResult"></div>
-      `;
-    }
-
-    async function runPayroll() {
-      const month = document.getElementById('payrollMonth').value;
-      if (!month) return toast('Select a month', 'error');
-      try {
-        await hrmsApi('generatePayroll', { month });
-        toast('Payroll generated', 'success');
-        viewPayroll();
-      } catch (err) {
-        toast('Error: ' + err.message, 'error');
-      }
-    }
-
-    async function viewPayroll() {
-      const month = document.getElementById('payrollMonth').value;
-      if (!month) return;
-      try {
-        const data = await hrmsApi('getPayroll', { month });
-        const container = document.getElementById('payrollResult');
-        if (!data || data.length === 0) {
-          container.innerHTML = '<p>No payroll records.</p>';
-          return;
-        }
-        let html = `<div class="table-wrap"><table>
-          <thead><tr><th>Emp ID</th><th>Name</th><th>Squad</th><th>Basic</th><th>HRA</th><th>Allow.</th><th>OT Pay</th><th>Gross</th><th>PF</th><th>ESI</th><th>TDS</th><th>Ded.</th><th>Net Pay</th><th>Status</th></tr></thead><tbody>
-          ${data.map(p => `
-            <tr>
-              <td>${p.empId}</td>
-              <td>${p.name}</td>
-              <td>${p.squad}</td>
-              <td>₹${p.basic.toFixed(2)}</td>
-              <td>₹${p.hra.toFixed(2)}</td>
-              <td>₹${p.allowances.toFixed(2)}</td>
-              <td>₹${p.overtimePay.toFixed(2)}</td>
-              <td>₹${p.gross.toFixed(2)}</td>
-              <td>₹${p.pf.toFixed(2)}</td>
-              <td>₹${p.esi.toFixed(2)}</td>
-              <td>₹${p.tds.toFixed(2)}</td>
-              <td>₹${p.totalDed.toFixed(2)}</td>
-              <td><strong>₹${p.net.toFixed(2)}</strong></td>
-              <td><span class="badge ${p.status}">${p.status}</span></td>
-            </tr>
-          `).join('')}
-          </tbody></table></div>`;
-        container.innerHTML = html;
-      } catch (err) {
-        toast('Error: ' + err.message, 'error');
-      }
-    }
-
-    // ---- Recruitment, Performance, Training ----
-    // (We'll implement them with similar patterns; for brevity, we provide minimal versions.)
-    async function loadRecruitmentUI() {
-      const container = document.getElementById('panel-recruitment');
-      container.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
-          <button class="btn btn-primary" onclick="openRecruitmentModal()"><i class="fas fa-plus"></i> Add Candidate</button>
-          <select id="recFilter" onchange="loadRecruitment()"><option value="all">All</option><option value="Applied">Applied</option><option value="Interview">Interview</option><option value="Offer">Offer</option><option value="Hired">Hired</option></select>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Job Title</th><th>Dept</th><th>Candidate</th><th>Status</th><th>Interview Date</th><th>Notes</th><th>Actions</th></tr></thead>
-            <tbody id="recBody"><tr><td colspan="8">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      `;
-      await loadRecruitment();
-    }
-
-    async function loadRecruitment() {
-      const status = document.getElementById('recFilter')?.value || 'all';
-      const data = await hrmsApi('getRecruitment', { status: status === 'all' ? null : status });
-      const tbody = document.getElementById('recBody');
-      if (!tbody) return;
-      if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8">No candidates.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = data.map(r => `
-        <tr>
-          <td>${r.id}</td>
-          <td>${r.jobTitle}</td>
-          <td>${r.dept}</td>
-          <td>${r.candidate}</td>
-          <td><span class="badge ${r.status}">${r.status}</span></td>
-          <td>${r.interviewDate}</td>
-          <td>${r.notes}</td>
-          <td>
-            <button class="action-btn edit" onclick="openRecruitmentModal('${r.id}')"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete" onclick="deleteRecruitment('${r.id}')"><i class="fas fa-trash"></i></button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // Similar functions for Performance and Training – we'll skip for brevity.
-
-    // ================================================================
-    //  MODAL SUBMIT HANDLER (universal)
-    // ================================================================
-    async function handleModalSubmit(e) {
-      e.preventDefault();
-      // Detect which form is open
-      if (document.getElementById('empId')) {
-        // Employee
-        const id = document.getElementById('empId').value;
-        const emp = {
-          id: id,
-          firstName: document.getElementById('empFirstName').value.trim(),
-          lastName: document.getElementById('empLastName').value.trim(),
-          email: document.getElementById('empEmail').value.trim(),
-          phone: document.getElementById('empPhone').value.trim(),
-          dob: document.getElementById('empDob').value,
-          gender: document.getElementById('empGender').value,
-          address: document.getElementById('empAddress').value.trim(),
-          emergency: document.getElementById('empEmergency').value.trim(),
-          dependents: document.getElementById('empDependents').value.trim(),
-          qualifications: document.getElementById('empQualifications').value.trim(),
-          experience: document.getElementById('empExperience').value.trim(),
-          documents: document.getElementById('empDocuments').value.trim(),
-          squad: document.getElementById('empSquad').value,
-          role: document.getElementById('empRole').value.trim(),
-          joiningDate: document.getElementById('empJoining').value,
-          salary: parseFloat(document.getElementById('empSalary').value) || 0,
-          bank: document.getElementById('empBank').value.trim()
-        };
-        if (!emp.firstName) return toast('First Name required', 'error');
-        try {
-          if (id) await hrmsApi('updateEmployee', emp);
-          else await hrmsApi('addEmployee', emp);
-          toast(id ? 'Updated' : 'Added', 'success');
-          closeModal();
-          loadEmployees();
-        } catch (err) {
-          toast('Error: ' + err.message, 'error');
-        }
-        return;
-      }
-
-      if (document.getElementById('taskId')) {
-        // Task
-        const id = document.getElementById('taskId').value;
-        const task = {
-          id: id,
-          name: document.getElementById('taskName').value.trim(),
-          epic: document.getElementById('taskEpic').value,
-          assignedTo: document.getElementById('taskAssigned').value.trim(),
-          status: document.getElementById('taskStatus').value,
-          start: document.getElementById('taskStart').value,
-          end: document.getElementById('taskEnd').value,
-          progress: parseInt(document.getElementById('taskProgress').value) || 0,
-          dependency: document.getElementById('taskDependency').value.trim()
-        };
-        if (!task.name) return toast('Task name required', 'error');
-        try {
-          if (id) await projectApi('updateTask', task);
-          else await projectApi('addTask', task);
-          toast(id ? 'Task updated' : 'Task added', 'success');
-          closeModal();
-          loadTasksUI();
-        } catch (err) {
-          toast('Error: ' + err.message, 'error');
-        }
-        return;
-      }
-
-      if (document.getElementById('trItemId')) {
-        // Transaction
-        const trans = {
-          date: document.getElementById('trDate').value,
-          itemId: document.getElementById('trItemId').value.trim(),
-          itemName: document.getElementById('trItemName').value.trim(),
-          type: document.getElementById('trType').value,
-          qty: parseFloat(document.getElementById('trQty').value) || 0,
-          issuedTo: document.getElementById('trIssuedTo').value.trim(),
-          returnedBy: document.getElementById('trReturnedBy').value.trim(),
-          remarks: document.getElementById('trRemarks').value.trim()
-        };
-        if (!trans.itemId || !trans.itemName) return toast('Item ID and Name required', 'error');
-        try {
-          await toolsApi('addTransaction', trans);
-          toast('Transaction added', 'success');
-          closeModal();
-          loadTransactionsUI();
-        } catch (err) {
-          toast('Error: ' + err.message, 'error');
-        }
-        return;
-      }
-
-      if (document.getElementById('leaveStart')) {
-        // Leave request
-        const empId = document.getElementById('leaveEmpId').value;
-        const type = document.getElementById('leaveType').value;
-        const start = document.getElementById('leaveStart').value;
-        const end = document.getElementById('leaveEnd').value;
-        const reason = document.getElementById('leaveReason').value.trim();
-        if (!empId || !start || !end) return toast('Employee and dates required', 'error');
-        const days = Math.ceil((new Date(end) - new Date(start)) / (1000*60*60*24)) + 1;
-        try {
-          await hrmsApi('addLeaveRequest', { empId, type, start, end, days, reason });
-          toast('Leave request submitted', 'success');
-          closeModal();
-          loadLeaveRequests();
-        } catch (err) {
-          toast('Error: ' + err.message, 'error');
-        }
-        return;
-      }
-
-      toast('Unknown form', 'error');
-    }
-
-    // ================================================================
-    //  UTILITY
-    // ================================================================
-    function showError(title, error) {
-      document.getElementById('contentArea').innerHTML = `<div class="dash-card" style="color:var(--red);"><h3><i class="fas fa-exclamation-circle"></i> Error loading ${title}</h3><p>${error}</p></div>`;
-    }
-
-    function toast(message, type = 'info') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-      toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(30px)';
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
-
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('open');
-    }
-
-    // ================================================================
-    //  INIT – check session
-    // ================================================================
-    window.onload = function() {
-      checkSession();
-    };
-  </script>
+<div id="loginScreen">
+<div class="login-box">
+<div class="brand">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="56" height="56" aria-label="BALSONS"><defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0097B2"/><stop offset="100%" stop-color="#0B1A33"/></linearGradient></defs><polygon points="60,8 104,34 104,86 60,112 16,86 16,34" fill="url(#lg)" stroke="#0097B2" stroke-width="2"/><text x="60" y="72" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="42" fill="#E64646">B</text></svg>
+<h1>BALSONS <span>&middot;</span> PROJECT MANAGER</h1><p>Project Execution Management System</p></div>
+<form id="loginForm">
+<div class="form-group"><label>Username</label><input type="text" id="loginUsername" required autocomplete="username"></div>
+<div class="form-group"><label>Password</label><input type="password" id="loginPassword" required autocomplete="current-password"></div>
+<button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:.7rem">Login</button>
+<div id="loginError" class="text-red" style="margin-top:.8rem;text-align:center"></div>
+<div class="login-hint"><strong>Default accounts:</strong><br><code>admin</code> / <code>admin123</code> (Administrator)<br><code>pm</code> / <code>pm123</code> (Project Manager)<br><code>engineer</code> / <code>eng123</code> (Site Engineer)</div>
+</form></div></div>
+<div id="appScreen">
+<aside class="sidebar">
+<div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="36" height="36" aria-hidden="true"><polygon points="60,8 104,34 104,86 60,112 16,86 16,34" fill="#0097B2" stroke="#0097B2"/><text x="60" y="72" text-anchor="middle" font-weight="800" font-size="42" fill="#E64646">B</text></svg>
+<div><h1>BALSONS <span>&middot;</span> PM</h1><small>PROJECT MANAGER</small></div></div>
+<nav id="sidebarNav"></nav>
+<div class="user-info"><strong id="userName">User</strong><div id="userRole" style="font-size:.68rem;opacity:.6"></div>
+<button class="logout-btn" id="logoutBtn">Logout</button></div></aside>
+<div class="main"><div class="topbar"><div class="page-title" id="pageTitle">Dashboard</div>
+<div class="topbar-right"><div class="search-box"><span>&#128269;</span><input type="search" id="globalSearch" placeholder="Search..."><div id="searchResults" class="search-results hidden"></div></div>
+<button class="btn btn-secondary btn-sm" id="themeToggle">&#9790;</button>
+<button class="btn btn-primary btn-sm" id="refreshBtn">Refresh</button></div></div>
+<div class="content" id="contentArea"></div></div></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal-box"><div class="modal-header"><h2 id="modalTitle">Edit</h2><button type="button" class="modal-close" id="modalClose">&times;</button></div>
+<form id="modalForm"><div id="modalFields"></div><div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
+<button type="button" class="btn btn-secondary" id="modalCancelBtn">Cancel</button><button type="submit" class="btn btn-primary">Save</button></div></form></div></div>
+<div class="toast-container" id="toastContainer"></div>
+<script>
+(function(){
+'use strict';
+var DB_NAME='balsons_pems',DB_VERSION=1,PROJECT_ID='PRJ-JTRWF-001';
+var STORES=['users','projects','tasks','schedule','milestones','dailyExecution','manpower','equipment','toolsInventory','toolsTransactions','resources','mobilization','risks','commercial','documents','approvals','notifications','audit','settings'];
+var TASK_STATUSES=['Planned','Ready','In Progress','Blocked','Completed','Verified'];
+var WORKFLOW_STAGES=['Planning','Mobilization','Heavy Lift','Positioning','Installation','Alignment','Erection','Testing','Commissioning','Demobilization','Closure'];
+var RISK_LEVELS=['Low','Medium','High','Critical'];
+var APPROVAL_STATUSES=['Pending','Approved','Rejected'];
+var ROLES={admin:{label:'Administrator',permissions:['*']},pm:{label:'Project Manager',permissions:['dashboard:read','projects:*','wbs:*','schedule:*','milestones:*','execution:*','manpower:*','equipment:*','tools:*','resources:*','mobilization:*','risk:*','commercial:*','documents:*','approvals:*','reports:*','search:*','admin:read']},engineer:{label:'Site Engineer',permissions:['dashboard:read','projects:read','wbs:read','wbs:write','schedule:read','milestones:read','execution:*','manpower:read','equipment:read','tools:*','resources:read','mobilization:read','risk:read','risk:write','documents:read','documents:write','reports:read','search:*']},viewer:{label:'Viewer',permissions:['dashboard:read','projects:read','wbs:read','schedule:read','milestones:read','execution:read','manpower:read','equipment:read','tools:read','resources:read','mobilization:read','risk:read','commercial:read','documents:read','reports:read','search:*']}};
+var NAV=[{id:'dashboard',ico:'◈',label:'Dashboard',perm:'dashboard:read'},{id:'projects',ico:'▣',label:'Projects',perm:'projects:read'},{id:'wbs',ico:'⊞',label:'WBS / Tasks',perm:'wbs:read'},{id:'schedule',ico:'◷',label:'Schedule',perm:'schedule:read'},{id:'milestones',ico:'⚑',label:'Milestones',perm:'milestones:read'},{id:'execution',ico:'⛑',label:'Daily Execution',perm:'execution:read'},{id:'manpower',ico:'👥',label:'Manpower',perm:'manpower:read'},{id:'equipment',ico:'⛟',label:'Equipment',perm:'equipment:read'},{id:'tools',ico:'🔧',label:'Tools',perm:'tools:read'},{id:'resources',ico:'📦',label:'Resources',perm:'resources:read'},{id:'mobilization',ico:'➤',label:'Mobilization',perm:'mobilization:read'},{id:'risk',ico:'⚠',label:'Risk / HSE',perm:'risk:read'},{id:'commercial',ico:'₹',label:'Commercial',perm:'commercial:read'},{id:'documents',ico:'📄',label:'Documents',perm:'documents:read'},{id:'approvals',ico:'✓',label:'Approvals',perm:'approvals:read'},{id:'reports',ico:'▤',label:'Reports',perm:'reports:read'},{id:'admin',ico:'⚙',label:'Administration',perm:'admin:read'}];
+var state={user:null,currentPage:'dashboard',projectId:PROJECT_ID};
+var modules={},dbP=null;
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,type){var c=$('toastContainer');if(!c)return;var el=document.createElement('div');el.className='toast '+(type||'');el.textContent=msg;c.appendChild(el);setTimeout(function(){el.style.opacity='0';setTimeout(function(){el.remove();},300);},3500);}
+function badge(st){return '<span class="badge badge-'+esc((st||'').replace(/\s+/g,'-'))+'">'+esc(st||'')+'</span>';}
+function fmtCur(n){return '₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});}
+function fmtDate(d){return d?new Date(d).toLocaleDateString('en-IN'):'-';}
+function hasPerm(p){var u=state.user;if(!u)return false;var r=ROLES[u.role];if(!r)return false;if(r.permissions.indexOf('*')>=0)return true;if(r.permissions.indexOf(p)>=0)return true;var res=p.split(':')[0];return r.permissions.indexOf(res+':*')>=0;}
+function reqPerm(p){if(!hasPerm(p))throw new Error('Permission denied');}
+function openDB(){if(dbP)return dbP;dbP=new Promise(function(res,rej){var r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=function(e){var db=e.target.result;STORES.forEach(function(s){if(!db.objectStoreNames.contains(s)){var os=db.createObjectStore(s,{keyPath:'id'});if(s==='audit')os.createIndex('timestamp','timestamp');if(s==='tasks'||s==='manpower')os.createIndex('projectId','projectId');}});};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});return dbP;}
+function tx(stores,mode){return openDB().then(function(db){return db.transaction(stores,mode||'readonly');});}
+function dbAll(store){return tx([store]).then(function(t){return new Promise(function(res,rej){var q=t.objectStore(store).getAll();q.onsuccess=function(){res(q.result||[]);};q.onerror=function(){rej(q.error);};});});}
+function dbGet(store,id){return tx([store]).then(function(t){return new Promise(function(res,rej){var q=t.objectStore(store).get(id);q.onsuccess=function(){res(q.result||null);};q.onerror=function(){rej(q.error);};});});}
+function dbPut(store,rec){return tx([store],'readwrite').then(function(t){return new Promise(function(res,rej){var q=t.objectStore(store).put(rec);q.onsuccess=function(){res(rec);};q.onerror=function(){rej(q.error);};});});}
+function dbBulk(store,recs){return tx([store],'readwrite').then(function(t){var os=t.objectStore(store);return Promise.all(recs.map(function(r){return new Promise(function(res,rej){var q=os.put(r);q.onsuccess=res;q.onerror=rej;});}));});}
+function dbDel(store,id){return tx([store],'readwrite').then(function(t){return new Promise(function(res,rej){var q=t.objectStore(store).delete(id);q.onsuccess=function(){res(true);};q.onerror=function(){rej(q.error);};});});}
+function dbClear(store){return tx([store],'readwrite').then(function(t){return new Promise(function(res,rej){var q=t.objectStore(store).clear();q.onsuccess=res;q.onerror=rej;});});}
+function dbEmpty(){return openDB().then(function(db){return Promise.all(STORES.map(function(s){return new Promise(function(res,rej){var t=db.transaction([s],'readonly');var q=t.objectStore(s).count();q.onsuccess=function(){res(q.result);};q.onerror=rej;});})).then(function(cs){return cs.every(function(c){return c===0;});});});}
+function exportAll(){var out={};return Promise.all(STORES.map(function(s){return dbAll(s).then(function(d){out[s]=d;});})).then(function(){return out;});}
+function importAll(data,clear){var p=clear?Promise.all(STORES.map(dbClear)):Promise.resolve();return p.then(function(){return Promise.all(Object.keys(data).map(function(s){if(STORES.indexOf(s)<0||!Array.isArray(data[s]))return Promise.resolve();return dbBulk(s,data[s]);}));});}
+var enc=new TextEncoder();
+function hashPw(pw,saltB64){var salt=Uint8Array.from(atob(saltB64),function(c){return c.charCodeAt(0);});return crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']).then(function(key){return crypto.subtle.deriveBits({name:'PBKDF2',salt:salt,iterations:120000,hash:'SHA-256'},key,256);}).then(function(bits){return btoa(String.fromCharCode.apply(null,new Uint8Array(bits)));});}
+function randSalt(){var s=crypto.getRandomValues(new Uint8Array(16));return btoa(String.fromCharCode.apply(null,s));}
+function createUser(u){var salt=randSalt();return hashPw(u.password,salt).then(function(h){var user={id:'USR-'+u.username.toLowerCase(),username:u.username,fullName:u.fullName,role:u.role,email:u.email||'',salt:salt,passwordHash:h,active:true,createdAt:new Date().toISOString()};return dbPut('users',user).then(function(){return user;});});}
+function verifyLogin(un,pw){return dbAll('users').then(function(users){var u=users.find(function(x){return x.username===un&&x.active;});if(!u)return null;return hashPw(pw,u.salt).then(function(h){if(h!==u.passwordHash)return null;var s={id:u.id,username:u.username,fullName:u.fullName,role:u.role,email:u.email};localStorage.setItem('balsons_session',JSON.stringify(s));state.user=s;return s;});});}
+function loadSession(){try{var r=localStorage.getItem('balsons_session');if(!r)return null;state.user=JSON.parse(r);return state.user;}catch(e){return null;}}
+function logout(){localStorage.removeItem('balsons_session');state.user=null;}
+function logAudit(action,entity,entityId,details){details=details||{};var u=state.user;return crypto.subtle.digest('SHA-256',enc.encode(JSON.stringify({action:action,entity:entity,entityId:entityId,ts:Date.now()}))).then(function(h){var chk=Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');return dbPut('audit',{id:'AUD-'+Date.now(),timestamp:new Date().toISOString(),userId:u?u.id:'system',username:u?u.username:'system',action:action,entity:entity,entityId:entityId||'',details:details,checksum:chk});});}
+function mkId(p,n){return p+'-'+String(n).padStart(3,'0');}
+function dateOff(days){var d=new Date('2025-04-01');d.setDate(d.getDate()+days);return d.toISOString().slice(0,10);}
+function getSeedData(){
+  var squads=['Wheel Mech','Wheel Rig','Wheel Fluid','Wheel Elec','Wheel Weld','Axle Mech','Axle Rig','Axle Fluid','Axle Elec','Axle Weld'];
+  var epics=[{code:'E1',name:'Preparation',weight:10},{code:'E2',name:'Axle Line',weight:25},{code:'E3',name:'Wheel Line',weight:25},{code:'E4',name:'Integration',weight:25},{code:'E5',name:'Handover',weight:15}];
+  var project={id:PROJECT_ID,code:'JTRWF',name:'JTRWF Wheel & Axle Forging Lines Installation Project',client:'Jupiter Tatravagonka Railway Factory Pvt. Ltd.',clientLocation:'Bhubaneswar, Odisha',contractor:'Balsons Heavy Lift & Shift',contractValue:117000000,currency:'INR',durationMonths:6,startDate:'2025-04-01',endDate:'2025-09-30',currentStage:'Installation',overheadMin:1800000,overheadMax:2500000,description:'Wheel and axle forging line installation for JTRWF railway factory.',status:'Active',createdAt:'2025-03-15T00:00:00.000Z'};
+  var tasks=[],t=1;
+  epics.forEach(function(epic,ei){var count=8+ei*2;for(var i=0;i<count;i++){var progress=Math.min(100,Math.round(ei*20+(i/count)*20+((i*7+ei*3)%10)));var statuses=progress>=100?['Completed','Verified']:progress>60?['In Progress']:progress>30?['Ready','In Progress']:['Planned','Ready'];var status=statuses[(i+ei)%statuses.length];tasks.push({id:mkId('TSK',t++),projectId:PROJECT_ID,wbsCode:epic.code+'.'+(i+1),name:epic.name+' – Activity '+(i+1),epic:epic.code+': '+epic.name,assignedTo:squads[i%squads.length],status:status,progress:progress,start:dateOff(ei*25+i*2),end:dateOff(ei*25+i*2+14),dependency:i>0?mkId('TSK',t-2):'',priority:i%3===0?'High':'Normal',stage:WORKFLOW_STAGES[ei%WORKFLOW_STAGES.length]});}});
+  var manpower=[],fn=['Raj','Amit','Suresh','Vikram','Anil','Deepak','Ravi','Sanjay','Manoj','Prakash'],ln=['Kumar','Sharma','Patel','Singh','Yadav','Das','Mishra','Nayak','Panda','Mohanty'],roles=['Foreman','Technician','Welder','Rigger','Electrician','Fitter','Supervisor','Engineer'];
+  for(var i=1;i<=91;i++)manpower.push({id:mkId('EMP',i),projectId:PROJECT_ID,firstName:fn[i%fn.length],lastName:ln[(i*3)%ln.length],role:roles[i%roles.length],squad:squads[i%squads.length],phone:'+91-98'+String(10000000+i).slice(-8),email:'emp'+i+'@balsons.local',salary:25000+(i%20)*1500,skillCategory:['Skilled','Semi-Skilled','Unskilled','Technical','Supervisory'][i%5],joiningDate:dateOff(-30-(i%60)),status:i%17===0?'On Leave':'Active',deployed:i%5!==0});
+  var equipTypes=['Hydraulic Press','Overhead Crane 50T','Forklift 5T','Welding Station','Alignment Jig','Torque Wrench Set','Mobile Crane 25T','Compressor Unit'],equipment=[];
+  for(i=1;i<=31;i++)equipment.push({id:mkId('EQP',i),projectId:PROJECT_ID,name:equipTypes[i%equipTypes.length],make:['Caterpillar','Liebherr','Konecranes','Lincoln','Atlas Copco'][i%5],qty:1,responsible:squads[i%squads.length],status:i%7===0?'Maintenance':i%4===0?'Mobilizing':'Deployed',location:i%2===0?'Wheel Line Bay':'Axle Line Bay',deployed:i%6!==0});
+  var toolCats=['Hand Tools','Power Tools','Measuring','Lifting','Safety','Welding'],toolsInventory=[];
+  for(i=1;i<=373;i++)toolsInventory.push({id:mkId('TOOL',i),projectId:PROJECT_ID,name:'Tool Item '+i,category:toolCats[i%toolCats.length],spec:'Spec-'+(i%50),totalQty:1+(i%5),availableQty:Math.max(0,(1+(i%5))-(i%3)),unit:'Nos',location:i%2===0?'Main Store':'Site Store',supplier:['Bosch','Makita','Stanley','Hilti','Local'][i%5],lastUpdate:dateOff(-(i%30)),calibrationDue:i%15===0?dateOff(30):null});
+  var toolsTransactions=[];
+  for(i=1;i<=50;i++)toolsTransactions.push({id:mkId('TRX',i),projectId:PROJECT_ID,date:dateOff(i),itemId:mkId('TOOL',(i%100)+1),itemName:'Tool Item '+((i%100)+1),type:i%3===0?'Return':'Issue',qty:1+(i%3),issuedTo:squads[i%squads.length],returnedBy:i%3===0?squads[i%squads.length]:'',remarks:i%5===0?'Routine issue':''});
+  var milestones=[{id:'MS-001',projectId:PROJECT_ID,name:'Site Mobilization Complete',date:'2025-04-15',stage:'Mobilization',status:'Completed',progress:100},{id:'MS-002',projectId:PROJECT_ID,name:'Heavy Lift – Press Foundation',date:'2025-05-10',stage:'Heavy Lift',status:'Completed',progress:100},{id:'MS-003',projectId:PROJECT_ID,name:'Wheel Forging Line – Hydraulic Press Installation',date:'2025-05-18',stage:'Installation',status:'In Progress',progress:65},{id:'MS-004',projectId:PROJECT_ID,name:'Axle Line Alignment',date:'2025-06-20',stage:'Alignment',status:'Planned',progress:0},{id:'MS-005',projectId:PROJECT_ID,name:'Integration Testing',date:'2025-08-01',stage:'Testing',status:'Planned',progress:0},{id:'MS-006',projectId:PROJECT_ID,name:'Commissioning',date:'2025-08-25',stage:'Commissioning',status:'Planned',progress:0},{id:'MS-007',projectId:PROJECT_ID,name:'Project Closure',date:'2025-09-30',stage:'Closure',status:'Planned',progress:0}];
+  var schedule=tasks.map(function(task){return{id:'SCH-'+task.id,projectId:PROJECT_ID,taskId:task.id,plannedStart:task.start,plannedEnd:task.end,actualStart:task.progress>0?task.start:null,actualEnd:task.progress>=100?task.end:null,plannedProgress:Math.min(100,task.progress+5),actualProgress:task.progress};});
+  var dailyExecution=[];
+  for(var d=0;d<30;d++)dailyExecution.push({id:mkId('DEX',d+1),projectId:PROJECT_ID,date:dateOff(d),weather:['Clear','Cloudy','Rain'][d%3],manpowerPresent:55+(d%10),equipmentActive:18+(d%5),workDone:'Daily progress on '+epics[d%epics.length].name+' activities.',issues:d%7===0?'Minor delay due to weather':'',dprStatus:d<25?'Submitted':'Draft',createdBy:'pm'});
+  var riskTitles=['Welding machine calibration overdue','Heavy lift wind speed limit','Material delivery delay','Skilled welder shortage','Crane breakdown risk','Soil bearing capacity','Electrical supply interruption','HSE near-miss reporting','Subcontractor delay','Monsoon season impact','Torque wrench certification','Scaffolding inspection due'],risks=[];
+  riskTitles.forEach(function(title,ri){var likelihood=1+(ri%5),impact=1+((ri*2)%5),score=likelihood*impact;risks.push({id:mkId('RSK',ri+1),projectId:PROJECT_ID,title:title,category:['HSE','Technical','Commercial','Schedule','Resource'][ri%5],likelihood:likelihood,impact:impact,score:score,level:score>=15?'Critical':score>=10?'High':score>=5?'Medium':'Low',status:ri%4===0?'Open':ri%4===1?'Mitigating':'Monitoring',owner:squads[ri%squads.length],mitigation:'Mitigation plan for '+title,dueDate:dateOff(30+ri*5)});});
+  var commercial={id:'COM-JTRWF-001',projectId:PROJECT_ID,budgetTotal:117000000,actualTotal:54800000,overheadBudget:2150000,overheadActual:980000,currency:'INR',lineItems:[{id:'CLI-001',category:'Manpower',budget:35000000,actual:18500000},{id:'CLI-002',category:'Equipment',budget:28000000,actual:14200000},{id:'CLI-003',category:'Tools & Consumables',budget:12000000,actual:6800000},{id:'CLI-004',category:'Subcontract',budget:25000000,actual:9800000},{id:'CLI-005',category:'Overhead',budget:2150000,actual:980000},{id:'CLI-006',category:'Contingency',budget:14850000,actual:4520000}]};
+  return{projects:[project],tasks:tasks,schedule:schedule,milestones:milestones,manpower:manpower,equipment:equipment,toolsInventory:toolsInventory,toolsTransactions:toolsTransactions,resources:[{id:'RES-001',projectId:PROJECT_ID,type:'Material',name:'Structural Steel',qty:450,unit:'MT',allocated:320,status:'In Use'},{id:'RES-002',projectId:PROJECT_ID,type:'Material',name:'Concrete M40',qty:280,unit:'Cum',allocated:195,status:'In Use'},{id:'RES-003',projectId:PROJECT_ID,type:'Consumable',name:'Welding Electrodes',qty:5000,unit:'Kg',allocated:3200,status:'In Use'}],mobilization:[{id:'MOB-001',projectId:PROJECT_ID,item:'Site Office Container',plannedDate:'2025-04-02',actualDate:'2025-04-03',status:'Completed',qty:2},{id:'MOB-002',projectId:PROJECT_ID,item:'50T Mobile Crane',plannedDate:'2025-04-10',actualDate:'2025-04-12',status:'Completed',qty:1},{id:'MOB-003',projectId:PROJECT_ID,item:'Tool Containers',plannedDate:'2025-04-08',actualDate:null,status:'In Progress',qty:4},{id:'MOB-004',projectId:PROJECT_ID,item:'Manpower Camp',plannedDate:'2025-04-05',actualDate:'2025-04-06',status:'Completed',qty:1}],risks:risks,commercial:[commercial],documents:[{id:'DOC-001',projectId:PROJECT_ID,title:'Method Statement – Heavy Lift',type:'Technical',version:'1.2',status:'Approved',uploadedAt:'2025-03-20'},{id:'DOC-002',projectId:PROJECT_ID,title:'HSE Plan',type:'HSE',version:'2.0',status:'Approved',uploadedAt:'2025-03-18'},{id:'DOC-003',projectId:PROJECT_ID,title:'JMS – Wheel Line',type:'Quality',version:'1.0',status:'Under Review',uploadedAt:'2025-05-01'}],approvals:[{id:'APR-001',projectId:PROJECT_ID,type:'Document',refId:'DOC-003',title:'JMS – Wheel Line Approval',requestedBy:'engineer',status:'Pending',requestedAt:'2025-05-02'},{id:'APR-002',projectId:PROJECT_ID,type:'Commercial',refId:'CLI-004',title:'Subcontract Variation Order',requestedBy:'pm',status:'Approved',requestedAt:'2025-04-20',approvedBy:'admin',approvedAt:'2025-04-22'}],notifications:[{id:'NTF-001',userId:'USR-admin',title:'Risk item #RSK-001 requires attention',type:'risk',read:false,createdAt:new Date().toISOString()}],settings:[{id:'settings',theme:'light',defaultProjectId:PROJECT_ID,companyName:'Balsons Heavy Lift & Shift',fiscalYearStart:'04-01',dateFormat:'DD/MM/YYYY',currency:'INR'}],dailyExecution:dailyExecution};
+}
+function seedDatabase(){return dbEmpty().then(function(empty){if(!empty)return false;return Promise.all([createUser({username:'admin',password:'admin123',fullName:'System Administrator',role:'admin',email:'admin@balsons.com'}),createUser({username:'pm',password:'pm123',fullName:'Project Manager',role:'pm',email:'pm@balsons.com'}),createUser({username:'engineer',password:'eng123',fullName:'Site Engineer',role:'engineer',email:'engineer@balsons.com'})]).then(function(){var data=getSeedData();return Promise.all(Object.keys(data).map(function(k){return dbBulk(k,data[k]);}));}).then(function(){state.projectId=PROJECT_ID;return logAudit('SEED','database','initial',{project:PROJECT_ID});}).then(function(){return true;});});}
+function list(store){return dbAll(store).then(function(items){if(state.projectId&&items[0]&&items[0].projectId!==undefined)items=items.filter(function(i){return i.projectId===state.projectId;});return items;});}
+function save(store,rec,entity){entity=entity||store;return dbGet(store,rec.id).then(function(existing){if(!rec.id)rec.id=store.slice(0,3).toUpperCase()+'-'+Date.now();if(!rec.createdAt)rec.createdAt=existing?existing.createdAt:new Date().toISOString();rec.updatedAt=new Date().toISOString();if(state.projectId&&rec.projectId===undefined&&!existing)rec.projectId=state.projectId;return dbPut(store,rec).then(function(){return logAudit(existing?'UPDATE':'CREATE',entity,rec.id);}).then(function(){return rec;});});}
+function remove(store,id,entity){return dbDel(store,id).then(function(){return logAudit('DELETE',entity||store,id);});}
+function getProject(){return dbGet('projects',state.projectId).then(function(p){return p||null;});}
+function getSettings(){return dbGet('settings','settings').then(function(s){return s||{theme:'light',currency:'INR'};});}
+function updateSettings(patch){return getSettings().then(function(c){return dbPut('settings',Object.assign({id:'settings'},c,patch));});}
+function parseCSVLine(line){var out=[],cur='',inQ=false;for(var i=0;i<line.length;i++){var c=line[i];if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){out.push(cur);cur='';}else cur+=c;}out.push(cur);return out;}
+function parseCSV(text){var lines=text.trim().split(/\r?\n/);if(!lines.length)return[];var headers=parseCSVLine(lines[0]).map(function(h){return h.trim();});return lines.slice(1).filter(function(l){return l.trim();}).map(function(line){var vals=parseCSVLine(line);var o={};headers.forEach(function(h,j){o[h]=vals[j]!=null?vals[j].trim():'';});return o;});}
+function toCSV(rows){if(!rows.length)return'';var keys=Object.keys(rows[0]);var escv=function(v){v=String(v==null?'':v);return v.indexOf(',')>=0||v.indexOf('"')>=0?'"'+v.replace(/"/g,'""')+'"':v;};return keys.join(',')+'\n'+rows.map(function(r){return keys.map(function(k){return escv(r[k]);}).join(',');}).join('\n');}
+function downloadText(text,filename,mime){var b=new Blob([text],{type:mime||'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();URL.revokeObjectURL(a.href);}
+function downloadJSON(obj,filename){downloadText(JSON.stringify(obj,null,2),filename,'application/json');}
+var CSV_SCHEMAS={tasks:['id','wbsCode','name','status','progress','start','end'],manpower:['firstName','lastName','role','squad','status'],equipment:['name','make','status','location'],toolsInventory:['name','category','totalQty','availableQty'],risks:['title','category','likelihood','impact','status']};
+function validateCSV(store,rows){var req=CSV_SCHEMAS[store]||['id'];var errs=[];if(!rows.length)errs.push('No data rows');rows.forEach(function(r,i){req.forEach(function(f){if(!r[f]&&r[f]!==0&&r[f]!=='0')errs.push('Row '+(i+2)+': missing '+f);});});return errs;}
+function computeKPIs(){return Promise.all([getProject(),list('tasks'),list('manpower'),list('equipment'),list('toolsInventory'),list('risks'),list('commercial'),list('milestones'),list('approvals')]).then(function(res){var project=res[0],tasks=res[1],manpower=res[2],equipment=res[3],tools=res[4],risks=res[5],commercial=res[6],milestones=res[7];var com=commercial[0]||{},totalTasks=tasks.length,completed=tasks.filter(function(t){return t.status==='Completed'||t.status==='Verified';}).length,overallProgress=totalTasks?Math.round(tasks.reduce(function(s,t){return s+(t.progress||0);},0)/totalTasks):0;var now=new Date(),plannedProgress=tasks.reduce(function(s,t){var st=new Date(t.start),en=new Date(t.end);if(now<st)return s;if(now>en)return s+100;var pct=((now-st)/(en-st))*100;return s+Math.min(100,pct);},0)/(totalTasks||1);return{project:project,overallProgress:overallProgress,scheduleVariance:Math.round(overallProgress-plannedProgress),totalTasks:totalTasks,completed:completed,manpowerDeployed:manpower.filter(function(m){return m.deployed&&m.status==='Active';}).length,manpowerTotal:manpower.filter(function(m){return m.status==='Active';}).length,equipmentDeployed:equipment.filter(function(e){return e.deployed;}).length,equipmentTotal:equipment.length,toolsIssued:tools.reduce(function(s,t){return s+((t.totalQty||0)-(t.availableQty||0));},0),toolsTotal:tools.reduce(function(s,t){return s+(t.totalQty||0);},0),openRisks:risks.filter(function(r){return r.status==='Open'||r.status==='Mitigating';}).length,budgetActual:com.actualTotal||0,budgetTotal:com.budgetTotal||0,budgetPct:com.budgetTotal?((com.actualTotal/com.budgetTotal)*100).toFixed(2):'0',upcomingMilestones:milestones.filter(function(m){return m.status!=='Completed'&&new Date(m.date)>=new Date();}).length,statusBreakdown:{completed:tasks.filter(function(t){return t.status==='Completed'||t.status==='Verified';}).length,inProgress:tasks.filter(function(t){return t.status==='In Progress';}).length,notStarted:tasks.filter(function(t){return t.status==='Planned'||t.status==='Ready';}).length},manpowerBySkill:['Skilled','Semi-Skilled','Unskilled','Technical','Supervisory'].map(function(cat){return{category:cat,deployed:manpower.filter(function(m){return m.skillCategory===cat&&m.deployed;}).length,total:manpower.filter(function(m){return m.skillCategory===cat;}).length};}),recentTasks:tasks.slice().sort(function(a,b){return b.progress-a.progress;}).slice(0,5),recentRisks:risks.slice().sort(function(a,b){return b.score-a.score;}).slice(0,5)};});}
+function renderTable(headers,rows,actions){return '<div class="table-wrap"><table><thead><tr>'+headers.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')+(actions?'<th>Actions</th>':'')+'</tr></thead><tbody>'+(rows.length?rows.join(''):'<tr><td colspan="'+(headers.length+(actions?1:0))+'" class="text-center text-muted">No records</td></tr>')+'</tbody></table></div>';}
+function input(name,label,value,type,opts){opts=opts||{};type=type||'text';value=value==null?'':value;if(type==='select'){var optsHtml=(opts.options||[]).map(function(o){var v=typeof o==='string'?o:o.value,t=typeof o==='string'?o:o.label;return '<option value="'+esc(v)+'"'+(String(value)===String(v)?' selected':'')+'>'+esc(t)+'</option>';}).join('');return '<div class="form-group"><label>'+esc(label)+'</label><select name="'+name+'" id="'+name+'"'+(opts.required?' required':'')+'>'+optsHtml+'</select></div>';}
+if(type==='textarea')return '<div class="form-group"><label>'+esc(label)+'</label><textarea name="'+name+'" id="'+name+'" rows="3">'+esc(value)+'</textarea></div>';
+return '<div class="form-group"><label>'+esc(label)+'</label><input type="'+type+'" name="'+name+'" id="'+name+'" value="'+esc(value)+'"'+(opts.required?' required':'')+(opts.readonly?' readonly':'')+'></div>';}
+function openModal(title,html,onSubmit){$('modalTitle').textContent=title.replace(/<[^>]+>/g,'');$('modalFields').innerHTML=html;$('modalOverlay').classList.add('open');$('modalForm').onsubmit=function(e){e.preventDefault();Promise.resolve(onSubmit()).then(function(){closeModal();}).catch(function(err){toast(err.message,'error');});};}
+function closeModal(){$('modalOverlay').classList.remove('open');}
+function confirmAction(m){return window.confirm(m);}
+function donutChart(data,labels,colors){var total=data.reduce(function(a,b){return a+b;},0)||1;var acc=0,parts=[];data.forEach(function(v,i){var pct=(v/total)*100;parts.push(colors[i%colors.length]+' '+acc+'% '+(acc+pct)+'%');acc+=pct;});return '<div class="donut-wrap"><div class="donut" style="background:conic-gradient('+parts.join(',')+')"><span class="donut-label">'+Math.round((data[0]/total)*100)+'%</span></div><div class="donut-legend">'+labels.map(function(l,i){return '<span><span style="display:inline-block;width:10px;height:10px;background:'+colors[i%colors.length]+';border-radius:2px;margin-right:.4rem"></span>'+esc(l)+': '+data[i]+'</span>';}).join('')+'</div></div>';}
+function barChart(groups){var max=1;groups.forEach(function(g){max=Math.max(max,g.total,g.deployed);});return '<div class="bar-chart">'+groups.map(function(g){var h1=Math.round((g.deployed/max)*140),h2=Math.round((g.total/max)*140);return '<div class="bar-group"><div style="display:flex;align-items:flex-end;gap:3px;height:150px"><div class="bar-seg" style="height:'+h1+'px;background:#0097B2;width:18px" title="Deployed"></div><div class="bar-seg" style="height:'+h2+'px;background:#E64646;width:18px" title="Total"></div></div><div class="bar-label">'+esc(g.category)+'</div></div>';}).join('')+'</div>';}
+function createCrud(cfg){return{title:cfg.title,permission:cfg.permission,render:function(){return list(cfg.store).then(function(items){var rows=items.map(function(item){var cells=cfg.columns.map(function(col){var val=item[col.key];if(col.fmt==='cur')val=fmtCur(val);else if(col.fmt==='date')val=fmtDate(val);else if(col.fmt==='badge')val=badge(val);else val=esc(val==null?'-':val);return '<td>'+val+'</td>';}).join('');var canW=hasPerm((cfg.permission.split(':')[0])+':write')||hasPerm((cfg.permission.split(':')[0])+':*');return '<tr>'+cells+(canW?'<td><button class="btn-icon edit-btn" data-id="'+esc(item.id)+'">✎</button> <button class="btn-icon delete-btn" data-id="'+esc(item.id)+'">🗑</button></td>':'')+'</tr>';});var canW=hasPerm((cfg.permission.split(':')[0])+':write')||hasPerm((cfg.permission.split(':')[0])+':*');return '<div class="toolbar"><div><strong>'+items.length+'</strong> records</div><div style="display:flex;gap:.4rem">'+(hasPerm(cfg.permission)?'<button class="btn btn-secondary btn-sm" id="exportBtn">Export CSV</button>':'')+(canW?'<button class="btn btn-primary btn-sm" id="addBtn">+ Add</button>':'')+'</div></div>'+renderTable(cfg.columns.map(function(c){return c.label;}),rows,canW);});},afterRender:function(){return list(cfg.store).then(function(items){var canW=hasPerm((cfg.permission.split(':')[0])+':write')||hasPerm((cfg.permission.split(':')[0])+':*');var pid=cfg.pageId||cfg.store;function openForm(item){reqPerm((cfg.permission.split(':')[0])+':write');var fields=cfg.formFields(item||{});openModal((item?'Edit ':'Add ')+cfg.title,fields.map(function(f){return typeof f==='string'?f:f;}).join(''),function(){var record=Object.assign({},item||{});cfg.fieldNames.forEach(function(n){var el=$(n);if(el)record[n]=el.type==='number'?Number(el.value):el.value;});if(record.deployed!==undefined)record.deployed=String(record.deployed)==='true';if(cfg.store==='risks'){record.likelihood=Number(record.likelihood)||1;record.impact=Number(record.impact)||1;record.score=record.likelihood*record.impact;record.level=record.score>=15?'Critical':record.score>=10?'High':record.score>=5?'Medium':'Low';}
+return save(cfg.store,record,cfg.entity||cfg.store).then(function(){toast('Saved','success');navigate(pid);});});}
+if($('addBtn'))$('addBtn').onclick=function(){openForm(null);};
+if($('exportBtn'))$('exportBtn').onclick=function(){downloadText(toCSV(items),cfg.store+'-export.csv','text/csv');toast('CSV exported','success');};
+document.querySelectorAll('.edit-btn').forEach(function(btn){btn.onclick=function(){openForm(items.find(function(i){return i.id===btn.dataset.id;}));};});
+document.querySelectorAll('.delete-btn').forEach(function(btn){btn.onclick=function(){if(!confirmAction('Delete?'))return;reqPerm((cfg.permission.split(':')[0])+':write');remove(cfg.store,btn.dataset.id,cfg.entity||cfg.store).then(function(){toast('Deleted','success');navigate(pid);});};});});}};}
+modules.dashboard={title:'Dashboard',permission:'dashboard:read',render:function(){return computeKPIs().then(function(k){var p=k.project||{};return '<div class="stats-grid"><div class="stat-card"><div class="label">Overall Progress</div><div class="value text-teal">'+k.overallProgress+'%</div><div class="sub">'+k.completed+'/'+k.totalTasks+' tasks</div></div><div class="stat-card"><div class="label">Schedule Variance</div><div class="value '+(k.scheduleVariance<0?'text-red':'text-teal')+'">'+(k.scheduleVariance>0?'+':'')+k.scheduleVariance+'%</div></div><div class="stat-card"><div class="label">Manpower</div><div class="value">'+k.manpowerDeployed+'/'+k.manpowerTotal+'</div></div><div class="stat-card"><div class="label">Equipment</div><div class="value">'+k.equipmentDeployed+'/'+k.equipmentTotal+'</div></div><div class="stat-card"><div class="label">Tools Issued</div><div class="value">'+k.toolsIssued+'/'+k.toolsTotal+'</div></div><div class="stat-card"><div class="label">Open Risks</div><div class="value text-red">'+k.openRisks+'</div></div><div class="stat-card"><div class="label">Budget vs Actual</div><div class="value">'+fmtCur(k.budgetActual)+'</div><div class="sub">'+k.budgetPct+'% of '+fmtCur(k.budgetTotal)+'</div></div><div class="stat-card"><div class="label">Milestones</div><div class="value">'+k.upcomingMilestones+'</div></div></div><div class="card"><strong>'+esc(p.name||'')+'</strong> · '+esc(p.client||'')+' · Stage: '+badge(p.currentStage||'-')+'</div><div class="dash-grid"><div class="card"><h3>◈ Project Progress</h3>'+donutChart([k.statusBreakdown.completed,k.statusBreakdown.inProgress,k.statusBreakdown.notStarted],['Completed','In Progress','Not Started'],['#0097B2','#FFC107','#E0E0E0'])+'</div><div class="card"><h3>👥 Manpower by Skill</h3>'+barChart(k.manpowerBySkill)+'</div></div><div class="dash-grid" style="margin-top:1rem"><div class="card"><h3>Tasks</h3>'+(k.recentTasks.map(function(t){return '<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border)"><span>'+esc(t.name)+'</span>'+badge(t.status)+'</div>';}).join('')||'<p class="text-muted">No tasks</p>')+'</div><div class="card"><h3>Top Risks</h3>'+(k.recentRisks.map(function(r){return '<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border)"><span>'+esc(r.title)+'</span>'+badge(r.level)+'</div>';}).join('')||'<p class="text-muted">No risks</p>')+'</div></div>';});}};
+modules.projects={title:'Projects',permission:'projects:read',render:function(){return list('projects').then(function(ps){var p=ps[0];if(!p)return '<p>No projects.</p>';return '<div class="card"><h3>▣ Project Master – '+esc(p.code)+'</h3><div class="form-row"><div><strong>Name:</strong> '+esc(p.name)+'</div><div><strong>Status:</strong> '+badge(p.status)+'</div></div><div class="form-row" style="margin-top:.8rem"><div><strong>Client:</strong> '+esc(p.client)+' ('+esc(p.clientLocation)+')</div><div><strong>Contractor:</strong> '+esc(p.contractor)+'</div></div><div class="form-row" style="margin-top:.8rem"><div><strong>Contract Value:</strong> '+fmtCur(p.contractValue)+'</div><div><strong>Duration:</strong> '+p.durationMonths+' months ('+fmtDate(p.startDate)+' – '+fmtDate(p.endDate)+')</div></div><div class="form-row" style="margin-top:.8rem"><div><strong>Stage:</strong> '+badge(p.currentStage)+'</div><div><strong>Overhead:</strong> '+fmtCur(p.overheadMin)+' – '+fmtCur(p.overheadMax)+'</div></div><p style="margin-top:1rem;color:var(--muted)">'+esc(p.description||'')+'</p>'+(hasPerm('projects:write')?'<button class="btn btn-primary btn-sm" id="editProjectBtn" style="margin-top:1rem">Edit Project</button>':'')+'</div>';});},afterRender:function(){var btn=$('editProjectBtn');if(!btn)return;btn.onclick=function(){list('projects').then(function(ps){var p=ps[0];openModal('Edit Project',[input('name','Name',p.name,'text',{required:true}),input('currentStage','Stage',p.currentStage,'select',{options:WORKFLOW_STAGES}),input('status','Status',p.status,'select',{options:['Active','On Hold','Completed']}),input('contractValue','Contract Value',p.contractValue,'number'),input('description','Description',p.description||'','textarea')].join(''),function(){var u=Object.assign({},p);['name','currentStage','status','description'].forEach(function(k){u[k]=$(k).value;});u.contractValue=Number($('contractValue').value);return save('projects',u,'project').then(function(){toast('Updated','success');navigate('projects');});});});};}};
+modules.wbs=createCrud({store:'tasks',title:'WBS / Tasks',permission:'wbs:read',pageId:'wbs',fieldNames:['id','wbsCode','name','epic','assignedTo','status','progress','start','end','stage','dependency'],columns:[{key:'id',label:'ID'},{key:'wbsCode',label:'WBS'},{key:'name',label:'Task'},{key:'status',label:'Status',fmt:'badge'},{key:'progress',label:'%'},{key:'start',label:'Start',fmt:'date'}],formFields:function(t){return[input('id','ID',t.id||'','text',{readonly:!!t.id}),input('wbsCode','WBS',t.wbsCode||''),input('name','Name',t.name||'', 'text',{required:true}),input('epic','EPIC',t.epic||''),input('assignedTo','Assigned',t.assignedTo||''),input('status','Status',t.status||'Planned','select',{options:TASK_STATUSES}),input('progress','Progress',t.progress||0,'number'),input('start','Start',t.start||'','date'),input('end','End',t.end||'','date'),input('stage','Stage',t.stage||'Planning','select',{options:WORKFLOW_STAGES}),input('dependency','Dependency',t.dependency||'')];}});
+modules.manpower=createCrud({store:'manpower',title:'Manpower',permission:'manpower:read',fieldNames:['id','firstName','lastName','role','squad','skillCategory','phone','email','salary','status','deployed'],columns:[{key:'id',label:'ID'},{key:'firstName',label:'First'},{key:'lastName',label:'Last'},{key:'role',label:'Role'},{key:'squad',label:'Squad'},{key:'skillCategory',label:'Skill'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(e){return[input('id','ID',e.id||'','text',{readonly:!!e.id}),input('firstName','First',e.firstName||''),input('lastName','Last',e.lastName||''),input('role','Role',e.role||''),input('squad','Squad',e.squad||''),input('skillCategory','Skill',e.skillCategory||'Skilled','select',{options:['Skilled','Semi-Skilled','Unskilled','Technical','Supervisory']}),input('phone','Phone',e.phone||''),input('email','Email',e.email||'','email'),input('salary','Salary',e.salary||0,'number'),input('status','Status',e.status||'Active','select',{options:['Active','On Leave','Inactive']}),input('deployed','Deployed',e.deployed?'true':'false','select',{options:[{value:'true',label:'Yes'},{value:'false',label:'No'}]})];}});
+modules.equipment=createCrud({store:'equipment',title:'Equipment',permission:'equipment:read',fieldNames:['id','name','make','qty','responsible','status','location','deployed'],columns:[{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'make',label:'Make'},{key:'status',label:'Status',fmt:'badge'},{key:'location',label:'Location'}],formFields:function(e){return[input('id','ID',e.id||'','text',{readonly:!!e.id}),input('name','Name',e.name||''),input('make','Make',e.make||''),input('qty','Qty',e.qty||1,'number'),input('responsible','Responsible',e.responsible||''),input('status','Status',e.status||'Deployed','select',{options:['Deployed','Mobilizing','Maintenance','Idle']}),input('location','Location',e.location||''),input('deployed','Deployed',e.deployed!==false?'true':'false','select',{options:[{value:'true',label:'Yes'},{value:'false',label:'No'}]})];}});
+modules.tools=createCrud({store:'toolsInventory',title:'Tools',permission:'tools:read',entity:'toolsInventory',pageId:'tools',fieldNames:['id','name','category','spec','totalQty','availableQty','unit','location','supplier'],columns:[{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'category',label:'Category'},{key:'totalQty',label:'Total'},{key:'availableQty',label:'Avail'},{key:'location',label:'Location'}],formFields:function(t){return[input('id','ID',t.id||'','text',{readonly:!!t.id}),input('name','Name',t.name||''),input('category','Category',t.category||''),input('spec','Spec',t.spec||''),input('totalQty','Total',t.totalQty||1,'number'),input('availableQty','Available',t.availableQty||1,'number'),input('unit','Unit',t.unit||'Nos'),input('location','Location',t.location||''),input('supplier','Supplier',t.supplier||'')];}});
+modules.resources=createCrud({store:'resources',title:'Resources',permission:'resources:read',fieldNames:['id','type','name','qty','unit','allocated','status'],columns:[{key:'id',label:'ID'},{key:'type',label:'Type'},{key:'name',label:'Name'},{key:'qty',label:'Qty'},{key:'allocated',label:'Allocated'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(r){return[input('id','ID',r.id||'','text',{readonly:!!r.id}),input('type','Type',r.type||'Material','select',{options:['Material','Consumable','Spare']}),input('name','Name',r.name||''),input('qty','Qty',r.qty||0,'number'),input('unit','Unit',r.unit||''),input('allocated','Allocated',r.allocated||0,'number'),input('status','Status',r.status||'In Use','select',{options:['In Use','Ordered','Delivered','Depleted']})];}});
+modules.mobilization=createCrud({store:'mobilization',title:'Mobilization',permission:'mobilization:read',fieldNames:['id','item','plannedDate','actualDate','status','qty'],columns:[{key:'id',label:'ID'},{key:'item',label:'Item'},{key:'plannedDate',label:'Planned',fmt:'date'},{key:'actualDate',label:'Actual',fmt:'date'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(m){return[input('id','ID',m.id||'','text',{readonly:!!m.id}),input('item','Item',m.item||''),input('plannedDate','Planned',m.plannedDate||'','date'),input('actualDate','Actual',m.actualDate||'','date'),input('status','Status',m.status||'Planned','select',{options:['Planned','In Progress','Completed']}),input('qty','Qty',m.qty||1,'number')];}});
+modules.risk=createCrud({store:'risks',title:'Risk / HSE',permission:'risk:read',fieldNames:['id','title','category','likelihood','impact','level','status','owner','mitigation','dueDate'],columns:[{key:'id',label:'ID'},{key:'title',label:'Title'},{key:'category',label:'Cat'},{key:'score',label:'Score'},{key:'level',label:'Level',fmt:'badge'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(r){return[input('id','ID',r.id||'','text',{readonly:!!r.id}),input('title','Title',r.title||''),input('category','Category',r.category||'HSE','select',{options:['HSE','Technical','Commercial','Schedule','Resource']}),input('likelihood','Likelihood',r.likelihood||3,'number'),input('impact','Impact',r.impact||3,'number'),input('level','Level',r.level||'Medium','select',{options:RISK_LEVELS}),input('status','Status',r.status||'Open','select',{options:['Open','Mitigating','Monitoring','Closed']}),input('owner','Owner',r.owner||''),input('mitigation','Mitigation',r.mitigation||'','textarea'),input('dueDate','Due',r.dueDate||'','date')];}});
+modules.documents=createCrud({store:'documents',title:'Documents',permission:'documents:read',fieldNames:['id','title','type','version','status','uploadedAt'],columns:[{key:'id',label:'ID'},{key:'title',label:'Title'},{key:'type',label:'Type'},{key:'version',label:'Ver'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(d){return[input('id','ID',d.id||'','text',{readonly:!!d.id}),input('title','Title',d.title||''),input('type','Type',d.type||'Technical','select',{options:['Technical','HSE','Quality','Commercial']}),input('version','Version',d.version||'1.0'),input('status','Status',d.status||'Draft','select',{options:['Draft','Under Review','Approved','Superseded']}),input('uploadedAt','Uploaded',d.uploadedAt||new Date().toISOString().slice(0,10),'date')];}});
+modules.milestones=createCrud({store:'milestones',title:'Milestones',permission:'milestones:read',fieldNames:['id','name','date','stage','status','progress'],columns:[{key:'id',label:'ID'},{key:'name',label:'Milestone'},{key:'date',label:'Date',fmt:'date'},{key:'stage',label:'Stage'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(m){return[input('id','ID',m.id||'','text',{readonly:!!m.id}),input('name','Name',m.name||''),input('date','Date',m.date||'','date'),input('stage','Stage',m.stage||'Planning','select',{options:WORKFLOW_STAGES}),input('status','Status',m.status||'Planned','select',{options:['Planned','In Progress','Completed','Delayed']}),input('progress','Progress',m.progress||0,'number')];}});
+modules.execution=createCrud({store:'dailyExecution',title:'Daily Execution',permission:'execution:read',entity:'dailyExecution',pageId:'execution',fieldNames:['id','date','weather','manpowerPresent','equipmentActive','workDone','issues','dprStatus'],columns:[{key:'date',label:'Date',fmt:'date'},{key:'weather',label:'Weather'},{key:'manpowerPresent',label:'Manpower'},{key:'equipmentActive',label:'Equipment'},{key:'dprStatus',label:'DPR',fmt:'badge'}],formFields:function(d){return[input('id','ID',d.id||'','text',{readonly:!!d.id}),input('date','Date',d.date||new Date().toISOString().slice(0,10),'date'),input('weather','Weather',d.weather||'Clear','select',{options:['Clear','Cloudy','Rain','Windy']}),input('manpowerPresent','Manpower',d.manpowerPresent||0,'number'),input('equipmentActive','Equipment',d.equipmentActive||0,'number'),input('workDone','Work Done',d.workDone||'','textarea'),input('issues','Issues',d.issues||'','textarea'),input('dprStatus','DPR Status',d.dprStatus||'Draft','select',{options:['Draft','Submitted','Approved']})];}});
+modules.approvals=createCrud({store:'approvals',title:'Approvals',permission:'approvals:read',fieldNames:['id','title','type','refId','requestedBy','status','requestedAt'],columns:[{key:'id',label:'ID'},{key:'title',label:'Title'},{key:'type',label:'Type'},{key:'requestedBy',label:'By'},{key:'status',label:'Status',fmt:'badge'}],formFields:function(a){return[input('id','ID',a.id||'','text',{readonly:!!a.id}),input('title','Title',a.title||''),input('type','Type',a.type||'Document','select',{options:['Document','Commercial','Change Order','Safety']}),input('refId','Ref ID',a.refId||''),input('requestedBy','Requested By',a.requestedBy||''),input('status','Status',a.status||'Pending','select',{options:APPROVAL_STATUSES}),input('requestedAt','Requested',a.requestedAt||new Date().toISOString().slice(0,10),'date')];}});
+modules.schedule={title:'Schedule',permission:'schedule:read',render:function(){return Promise.all([list('schedule'),list('tasks')]).then(function(res){var schedule=res[0],tasks=res[1],tmap={};tasks.forEach(function(t){tmap[t.id]=t;});var rows=schedule.map(function(s){var task=tmap[s.taskId]||{},v=(s.actualProgress||0)-(s.plannedProgress||0),bw=Math.min(100,s.actualProgress||0),bc=v<-5?'var(--red)':'var(--teal)';return '<tr><td>'+esc(task.name||s.taskId)+'</td><td>'+fmtDate(s.plannedStart)+'</td><td>'+fmtDate(s.plannedEnd)+'</td><td>'+fmtDate(s.actualStart)+'</td><td>'+fmtDate(s.actualEnd)+'</td><td>'+(s.plannedProgress||0)+'%</td><td>'+(s.actualProgress||0)+'%</td><td style="color:'+(v<0?'var(--red)':'var(--teal)')+'">'+(v>0?'+':'')+v+'%</td><td><div class="progress-bar"><div style="width:'+bw+'%;background:'+bc+'"></div></div></td>'+(hasPerm('schedule:write')?'<td><button class="btn-icon sch-edit" data-id="'+esc(s.id)+'">✎</button></td>':'')+'</tr>';});var canW=hasPerm('schedule:write');return '<div class="toolbar"><div><strong>'+schedule.length+'</strong> schedule entries</div>'+(canW?'<button class="btn btn-primary btn-sm" id="addSchBtn">+ Add</button>':'')+'</div><div class="card"><div class="table-wrap"><table><thead><tr><th>Task</th><th>Planned Start</th><th>Planned End</th><th>Actual Start</th><th>Actual End</th><th>Planned %</th><th>Actual %</th><th>Variance</th><th>Progress</th>'+(canW?'<th>Actions</th>':'')+'</tr></thead><tbody>'+(rows.join('')||'<tr><td colspan="10" class="text-center text-muted">No data</td></tr>')+'</tbody></table></div></div>';});},afterRender:function(){if(!hasPerm('schedule:write'))return;Promise.all([list('schedule'),list('tasks')]).then(function(res){var schedule=res[0],tasks=res[1];function openSch(item){openModal(item?'Edit Schedule':'Add Schedule',[input('id','ID',item?item.id:'','text',{readonly:!!item}),input('taskId','Task ID',item?item.taskId:'','text'),input('plannedStart','Planned Start',item?item.plannedStart:'','date'),input('plannedEnd','Planned End',item?item.plannedEnd:'','date'),input('actualStart','Actual Start',item?item.actualStart||'':'','date'),input('actualEnd','Actual End',item?item.actualEnd||'':'','date'),input('plannedProgress','Planned %',item?item.plannedProgress||0:0,'number'),input('actualProgress','Actual %',item?item.actualProgress||0:0,'number')].join(''),function(){var rec=Object.assign({},item||{});['id','taskId','plannedStart','plannedEnd','actualStart','actualEnd'].forEach(function(k){if($(k))rec[k]=$(k).value;});rec.plannedProgress=Number($('plannedProgress').value);rec.actualProgress=Number($('actualProgress').value);if(!rec.id)rec.id='SCH-'+Date.now();return save('schedule',rec,'schedule').then(function(){toast('Saved','success');navigate('schedule');});});}
+var ab=$('addSchBtn');if(ab)ab.onclick=function(){openSch(null);};
+document.querySelectorAll('.sch-edit').forEach(function(btn){btn.onclick=function(){openSch(schedule.find(function(s){return s.id===btn.dataset.id;}));};});});}};
+modules.commercial={title:'Commercial',permission:'commercial:read',render:function(){return list('commercial').then(function(cs){var c=cs[0]||{},items=c.lineItems||[],variance=(c.actualTotal||0)-(c.budgetTotal||0);var rows=items.map(function(li){return '<tr><td>'+esc(li.category)+'</td><td>'+fmtCur(li.budget)+'</td><td>'+fmtCur(li.actual)+'</td><td style="color:'+(li.actual>li.budget?'var(--red)':'var(--teal)')+'">'+fmtCur(li.actual-li.budget)+'</td>'+(hasPerm('commercial:write')?'<td><button class="btn-icon li-edit" data-id="'+esc(li.id)+'">✎</button></td>':'')+'</tr>';});return '<div class="stats-grid"><div class="stat-card"><div class="label">Budget</div><div class="value">'+fmtCur(c.budgetTotal)+'</div></div><div class="stat-card"><div class="label">Actual</div><div class="value">'+fmtCur(c.actualTotal)+'</div></div><div class="stat-card"><div class="label">Variance</div><div class="value" style="color:'+(variance>0?'var(--red)':'var(--teal)')+'">'+fmtCur(variance)+'</div></div></div><div class="toolbar">'+(hasPerm('commercial:write')?'<button class="btn btn-primary btn-sm" id="editComBtn">Update Totals</button>':'')+'</div>'+renderTable(['Category','Budget','Actual','Variance'].concat(hasPerm('commercial:write')?['Actions']:[]),rows,false);});},afterRender:function(){var eb=$('editComBtn');if(eb)eb.onclick=function(){list('commercial').then(function(cs){var c=cs[0];openModal('Update Commercial',[input('budgetTotal','Budget Total',c.budgetTotal,'number'),input('actualTotal','Actual Total',c.actualTotal,'number')].join(''),function(){c.budgetTotal=Number($('budgetTotal').value);c.actualTotal=Number($('actualTotal').value);return save('commercial',c,'commercial').then(function(){toast('Updated','success');navigate('commercial');});});});};document.querySelectorAll('.li-edit').forEach(function(btn){btn.onclick=function(){list('commercial').then(function(cs){var c=cs[0],li=(c.lineItems||[]).find(function(x){return x.id===btn.dataset.id;});openModal('Edit Line Item',[input('category','Category',li.category),input('budget','Budget',li.budget,'number'),input('actual','Actual',li.actual,'number')].join(''),function(){li.category=$('category').value;li.budget=Number($('budget').value);li.actual=Number($('actual').value);return save('commercial',c,'commercial').then(function(){toast('Updated','success');navigate('commercial');});});});};});}};
+modules.reports={title:'Reports',permission:'reports:read',render:function(){return '<div class="toolbar"><h3 style="margin:0">Reports</h3><div><button class="btn btn-primary btn-sm" id="exportAllBtn">Export CSV</button> <button class="btn btn-secondary btn-sm" id="printBtn">Print</button></div></div><div id="reportContent" class="card print-area"><p class="text-muted">Loading...</p></div>';},afterRender:function(){Promise.all([computeKPIs(),list('tasks'),list('risks'),list('dailyExecution')]).then(function(res){var k=res[0],tasks=res[1],risks=res[2],execution=res[3],p=k.project||{};$('reportContent').innerHTML='<div class="print-header"><strong>BALSONS PROJECT MANAGER</strong> – '+esc(p.name||'Report')+'</div><h3>Executive Summary</h3><p>Generated: '+new Date().toLocaleString('en-IN')+' by '+esc(state.user?state.user.fullName:'User')+'</p><div class="stats-grid"><div class="stat-card"><div class="label">Progress</div><div class="value">'+k.overallProgress+'%</div></div><div class="stat-card"><div class="label">Budget Used</div><div class="value">'+k.budgetPct+'%</div></div><div class="stat-card"><div class="label">Open Risks</div><div class="value">'+k.openRisks+'</div></div></div><h4 style="margin:1rem 0 .5rem">Tasks ('+tasks.length+')</h4>'+renderTable(['Task','Status','Progress'],tasks.slice(0,20).map(function(t){return '<tr><td>'+esc(t.name)+'</td><td>'+badge(t.status)+'</td><td>'+t.progress+'%</td></tr>';}))+'<h4 style="margin:1rem 0 .5rem">Risks ('+risks.length+')</h4>'+renderTable(['Risk','Score','Level'],risks.slice(0,15).map(function(r){return '<tr><td>'+esc(r.title)+'</td><td>'+r.score+'</td><td>'+badge(r.level)+'</td></tr>';}))+'<h4 style="margin:1rem 0 .5rem">Recent DPR</h4>'+renderTable(['Date','Manpower','Equipment','Status'],execution.slice(-10).reverse().map(function(d){return '<tr><td>'+fmtDate(d.date)+'</td><td>'+d.manpowerPresent+'</td><td>'+d.equipmentActive+'</td><td>'+badge(d.dprStatus)+'</td></tr>';}));});$('exportAllBtn').onclick=function(){Promise.all([list('tasks'),list('manpower'),list('equipment'),list('toolsInventory'),list('risks')]).then(function(res){var zip=toCSV(res[0])+'\n\n---\n\n';downloadText('# Tasks\n'+toCSV(res[0])+'\n\n# Manpower\n'+toCSV(res[1])+'\n\n# Equipment\n'+toCSV(res[2])+'\n\n# Tools\n'+toCSV(res[3])+'\n\n# Risks\n'+toCSV(res[4]),'balsons-report-'+new Date().toISOString().slice(0,10)+'.csv','text/csv');toast('Exported','success');});};$('printBtn').onclick=function(){window.print();};}};
+modules.admin={title:'Administration',permission:'admin:read',render:function(){return Promise.all([dbAll('audit'),dbAll('users'),getSettings()]).then(function(res){var audit=res[0].sort(function(a,b){return b.timestamp.localeCompare(a.timestamp);}).slice(0,50),users=res[1],settings=res[2];var auditRows=audit.map(function(a){return '<tr><td>'+fmtDate(a.timestamp)+'</td><td>'+esc(a.username)+'</td><td>'+esc(a.action)+'</td><td>'+esc(a.entity)+'</td><td>'+esc(a.entityId)+'</td></tr>';});var userRows=users.map(function(u){return '<tr><td>'+esc(u.username)+'</td><td>'+esc(u.fullName)+'</td><td>'+esc(u.role)+'</td><td>'+(u.active?'Active':'Inactive')+'</td></tr>';});var stores=Object.keys(CSV_SCHEMAS);return '<div class="subnav" id="adminTabs"><button class="active" data-tab="users">Users</button><button data-tab="audit">Audit</button><button data-tab="backup">Backup</button><button data-tab="import">CSV Import</button><button data-tab="settings">Settings</button></div><div id="tab-users" class="admin-panel"><div class="card"><h3>Users & RBAC</h3>'+renderTable(['Username','Name','Role','Status'],userRows)+'<p class="text-muted" style="margin-top:.8rem;font-size:.8rem">Roles: admin, pm, engineer, viewer</p></div></div><div id="tab-audit" class="admin-panel hidden"><div class="card"><h3>Audit Trail</h3>'+renderTable(['Time','User','Action','Entity','ID'],auditRows)+'</div></div><div id="tab-backup" class="admin-panel hidden"><div class="card"><h3>Backup & Restore</h3><p style="margin-bottom:1rem">Export all IndexedDB data as JSON or restore from backup.</p><button class="btn btn-primary" id="backupBtn">Download Backup</button> <label class="btn btn-secondary" style="cursor:pointer">Restore<input type="file" id="restoreFile" accept=".json" hidden></label> <button class="btn btn-danger" id="reseedBtn">Re-seed Database</button></div></div><div id="tab-import" class="admin-panel hidden"><div class="card"><h3>CSV Import</h3><p>Import → Validate → Preview → Commit</p><div class="form-row"><div class="form-group"><label>Target Store</label><select id="importStore">'+stores.map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join('')+'</select></div><div class="form-group"><label>CSV File</label><input type="file" id="importFile" accept=".csv"></div></div><button class="btn btn-primary" id="validateImportBtn">Validate & Preview</button><div id="importPreview" style="margin-top:1rem"></div></div></div><div id="tab-settings" class="admin-panel hidden"><div class="card"><h3>Settings</h3><div class="form-group"><label>Theme</label><select id="themeSelect"><option value="light"'+(settings.theme==='light'?' selected':'')+'>Light</option><option value="dark"'+(settings.theme==='dark'?' selected':'')+'>Dark</option></select></div><div class="form-group"><label>Company Name</label><input id="companyName" value="'+esc(settings.companyName||'')+'"></div><button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button></div></div>';});},afterRender:function(){var previewRows=[],previewStore='';document.querySelectorAll('#adminTabs button').forEach(function(btn){btn.onclick=function(){document.querySelectorAll('#adminTabs button').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');document.querySelectorAll('.admin-panel').forEach(function(p){p.classList.add('hidden');});var tab=$('tab-'+btn.dataset.tab);if(tab)tab.classList.remove('hidden');};});$('backupBtn').onclick=function(){exportAll().then(function(data){var meta={id:'backup-'+Date.now(),createdAt:new Date().toISOString(),version:'1.0'};downloadJSON({meta:meta,data:data},'balsons-backup-'+meta.id+'.json');return logAudit('BACKUP','database',meta.id);}).then(function(){toast('Backup downloaded','success');});};$('restoreFile').onchange=function(e){var file=e.target.files[0];if(!file||!confirm('Replace all data?'))return;file.text().then(function(text){var parsed=JSON.parse(text);return importAll(parsed.data||parsed,true);}).then(function(){toast('Restored. Reloading...','success');setTimeout(function(){location.reload();},1000);});};$('reseedBtn').onclick=function(){if(!confirm('Clear all data and re-seed JTRWF?'))return;Promise.all(STORES.map(dbClear)).then(seedDatabase).then(function(){toast('Re-seeded','success');setTimeout(function(){location.reload();},800);});};$('validateImportBtn').onclick=function(){var file=$('importFile').files[0];previewStore=$('importStore').value;if(!file)return toast('Select a file','error');file.text().then(function(text){previewRows=parseCSV(text);var errors=validateCSV(previewStore,previewRows);var preview=$('importPreview');if(errors.length){preview.innerHTML='<div class="text-red"><strong>Errors:</strong><ul>'+errors.map(function(e){return '<li>'+esc(e)+'</li>';}).join('')+'</ul></div>';return;}preview.innerHTML='<p><strong>'+previewRows.length+'</strong> rows validated.</p><pre style="font-size:.7rem;overflow:auto;max-height:200px">'+esc(JSON.stringify(previewRows.slice(0,5),null,2))+'</pre><button class="btn btn-primary" id="commitImportBtn">Confirm & Commit</button>';$('commitImportBtn').onclick=function(){Promise.all(previewRows.map(function(r){if(!r.id)r.id=previewStore.slice(0,3).toUpperCase()+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);if(state.projectId&&!r.projectId)r.projectId=state.projectId;return save(previewStore,r,previewStore);})).then(function(){toast('Imported '+previewRows.length+' rows','success');return logAudit('IMPORT',previewStore,previewStore,{count:previewRows.length});});};});};$('saveSettingsBtn').onclick=function(){updateSettings({theme:$('themeSelect').value,companyName:$('companyName').value}).then(function(){document.documentElement.setAttribute('data-theme',$('themeSelect').value);localStorage.setItem('balsons_theme',$('themeSelect').value);toast('Settings saved','success');});};}};
+function navigate(page){var mod=modules[page];if(!mod){$('contentArea').innerHTML='<div class="card text-red">Page not found</div>';return;}if(!hasPerm(mod.permission)&&!hasPerm('admin:read')){$('contentArea').innerHTML='<div class="card text-red">Access denied</div>';return;}state.currentPage=page;$('pageTitle').textContent=mod.title;document.querySelectorAll('#sidebarNav a').forEach(function(a){a.classList.toggle('active',a.dataset.page===page);});$('contentArea').innerHTML='<p class="text-muted">Loading...</p>';Promise.resolve(mod.render()).then(function(html){$('contentArea').innerHTML=html;if(mod.afterRender)return mod.afterRender();}).catch(function(err){$('contentArea').innerHTML='<div class="card text-red">'+esc(err.message)+'</div>';});}
+function renderNav(){var nav=$('sidebarNav');nav.innerHTML=NAV.filter(function(item){return hasPerm(item.perm)||hasPerm('admin:read');}).map(function(item){return '<a data-page="'+item.id+'"><span class="ico">'+item.ico+'</span><span>'+item.label+'</span></a>';}).join('');nav.querySelectorAll('a').forEach(function(a){a.onclick=function(e){e.preventDefault();navigate(a.dataset.page);};});}
+function showLogin(){$('loginScreen').style.display='flex';$('appScreen').classList.remove('active');}
+function showApp(){$('loginScreen').style.display='none';$('appScreen').classList.add('active');$('userName').textContent=state.user?state.user.fullName||state.user.username:'';$('userRole').textContent=state.user?state.user.role:'';renderNav();navigate('dashboard');}
+function globalSearch(q){q=q.trim().toLowerCase();if(!q)return Promise.resolve([]);var stores=['tasks','manpower','equipment','toolsInventory','risks','documents'];return Promise.all(stores.map(function(s){return list(s);})).then(function(results){var out=[];stores.forEach(function(s,i){results[i].forEach(function(item){var text=JSON.stringify(item).toLowerCase();if(text.indexOf(q)>=0)out.push({store:s,label:item.name||item.title||item.firstName||item.id,id:item.id});});});return out.slice(0,20);});}
+function bindEvents(){$('loginForm').onsubmit=function(e){e.preventDefault();$('loginError').textContent='';verifyLogin($('loginUsername').value.trim(),$('loginPassword').value).then(function(s){if(!s){$('loginError').textContent='Invalid username or password.';return;}showApp();toast('Welcome, '+s.fullName,'success');});};$('logoutBtn').onclick=function(){logout();showLogin();$('loginUsername').value='';$('loginPassword').value='';};$('refreshBtn').onclick=function(){navigate(state.currentPage);toast('Refreshed');};$('themeToggle').onclick=function(){var next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('balsons_theme',next);};$('modalClose').onclick=closeModal;$('modalCancelBtn').onclick=closeModal;$('modalOverlay').onclick=function(e){if(e.target.id==='modalOverlay')closeModal();};var st; $('globalSearch').oninput=function(e){clearTimeout(st);st=setTimeout(function(){globalSearch(e.target.value).then(function(results){var box=$('searchResults');if(!e.target.value.trim()){box.innerHTML='';box.classList.add('hidden');return;}box.classList.remove('hidden');box.innerHTML=results.length?results.map(function(r){return '<div data-page="'+({tasks:'wbs',toolsInventory:'tools'}[r.store]||r.store)+'"><strong>'+esc(r.label)+'</strong> <span class="text-muted">'+r.store+'</span></div>';}).join(''):'<div class="text-muted" style="padding:.5rem">No results</div>';box.querySelectorAll('div[data-page]').forEach(function(d){d.onclick=function(){navigate(d.dataset.page);box.classList.add('hidden');};});});},300);};}
+function init(){return seedDatabase().then(getSettings).then(function(settings){var theme=localStorage.getItem('balsons_theme')||settings.theme||'light';document.documentElement.setAttribute('data-theme',theme);if(loadSession())showApp();else showLogin();bindEvents();}).catch(function(err){console.error(err);toast('Init failed: '+err.message,'error');});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>
