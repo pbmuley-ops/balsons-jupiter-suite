@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspace
+cd "$(dirname "$0")/.."
 
 if [[ ! -f index.html ]]; then
   echo "error: index.html not found in repository root" >&2
